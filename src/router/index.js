@@ -2,6 +2,7 @@ import React from 'react';
 import Login from "../pages/login/index";
 import Tab from "../pages/tab/index";
 import Service from "../pages/services/index";
+import Petugas from "../pages/petugas/index";
 import Sidebar from "../components/sidebar/sidebar"
 import { createSwitchNavigator, createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation';
 
@@ -14,6 +15,16 @@ const LoginStack = createStackNavigator({
 });
 
 const PageStack = createStackNavigator({
+  PetugasIndex: { 
+    screen: Petugas,
+    navigationOptions: () => ({
+      title: 'Data Petugas',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
   TabIndex: { 
     screen: Tab,
     navigationOptions: () => ({
