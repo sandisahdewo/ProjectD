@@ -1,12 +1,20 @@
 import React, {Component} from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Container, Body, Content } from 'native-base';
+import { View, StyleSheet, TouchableHighlight } from 'react-native';
+import { Container, Body, Content, Icon } from 'native-base';
 import TabContent from '../../components/tab/content'
 import TabContentButton from '../../components/tab/content-button'
 
 export default class Index extends Component {
-  static navigationOptions = {
-    drawerLabel: 'Tab',
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerLeft: (
+        <TouchableHighlight onPress={() => navigation.openDrawer() }>
+          <View style={{marginLeft: 15}}>
+            <Icon name="ios-menu" size={28} style={{ color:'white' }}/>
+          </View>
+        </TouchableHighlight>
+      ),
+    }
   };
 
   render() {
@@ -16,14 +24,14 @@ export default class Index extends Component {
 
           <TabContent title="Maintank Inlet">
             <Body style={style.tabContentBody}>
-              <TabContentButton text="Line 1" onPress={() => this.props.navigation.navigate('ServiceIndex')}/>
+              <TabContentButton text="Line 1"/>
               <TabContentButton text="Line 2"/>
             </Body>
           </TabContent>
 
           <TabContent title="Pitstop Sarana 1">
             <Body style={style.tabContentBody}>
-              <TabContentButton text="Line 1"/>
+              <TabContentButton text="Line 1"  onPress={() => this.props.navigation.navigate('ServiceIndex')}/>
               <TabContentButton text="Line 2"/>
             </Body>
           </TabContent>

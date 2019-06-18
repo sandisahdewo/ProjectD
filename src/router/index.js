@@ -1,8 +1,10 @@
 import React from 'react';
 import Login from "../pages/login/index";
 import Tab from "../pages/tab/index";
-import Service from "../pages/services/index";
-import Petugas from "../pages/petugas/index";
+import ServiceIndex from "../pages/services/pitstop-sarana/index";
+import ServiceCreate from "../pages/services/pitstop-sarana/create";
+import PetugasIndex from "../pages/petugas/index";
+import PetugasCreate from "../pages/petugas/create";
 import Sidebar from "../components/sidebar/sidebar"
 import { createSwitchNavigator, createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation';
 
@@ -15,16 +17,6 @@ const LoginStack = createStackNavigator({
 });
 
 const PageStack = createStackNavigator({
-  PetugasIndex: { 
-    screen: Petugas,
-    navigationOptions: () => ({
-      title: 'Data Petugas',
-      headerTintColor: 'white',
-      headerStyle: {
-        backgroundColor: '#3C8DBC',
-      }
-    }) 
-  },
   TabIndex: { 
     screen: Tab,
     navigationOptions: () => ({
@@ -36,9 +28,39 @@ const PageStack = createStackNavigator({
     }) 
   },
   ServiceIndex: { 
-    screen: Service,
+    screen: ServiceIndex,
     navigationOptions: () => ({
       title: 'Data Service',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  ServiceCreate: { 
+    screen: ServiceCreate,
+    navigationOptions: () => ({
+      title: 'Data Service',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  PetugasIndex: { 
+    screen: PetugasIndex,
+    navigationOptions: () => ({
+      title: 'Data Petugas',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  PetugasCreate: { 
+    screen: PetugasCreate,
+    navigationOptions: () => ({
+      title: 'Tambah Petugas',
       headerTintColor: 'white',
       headerStyle: {
         backgroundColor: '#3C8DBC',
