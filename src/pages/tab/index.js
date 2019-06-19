@@ -31,8 +31,8 @@ export default class Index extends Component {
 
           <TabContent title="Pitstop Sarana 1">
             <Body style={style.tabContentBody}>
-              <TabContentButton text="Line 1"  onPress={() => this.props.navigation.navigate('ServiceIndex')}/>
-              <TabContentButton text="Line 2"/>
+              <TabContentButton text="Line 1" onPress={() => this.props.navigation.navigate('ServiceIndex')}/>
+              <TabContentButton text="Line 2" onPress={() => this.props.navigation.navigate('PetugasIndex')} />
             </Body>
           </TabContent>
 

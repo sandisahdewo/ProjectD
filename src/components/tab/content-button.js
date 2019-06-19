@@ -1,13 +1,17 @@
 import React, {Component} from 'react';
-import { Card, CardItem, Body, Text, Button } from 'native-base';
+import { Button } from 'react-native-elements';
 
 class TabContentButton extends Component {
 
   render() {
     return (
-      <Button style={{paddingHorizontal:40}} bordered dark>
-        <Text style={{fontWeight:'bold', fontSize:14, color:'black'}} onPress={this.props.onPress}>{this.props.text}</Text>
-      </Button>
+      <Button 
+        buttonStyle={{paddingHorizontal:40, borderColor:'black'}}
+        title={this.props.text} 
+        type="outline" 
+        onPress={this.props.onPress}
+        titleStyle={{color:'black'}}
+      />
     )
   }
 }

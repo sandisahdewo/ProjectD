@@ -3,6 +3,8 @@ import Login from "../pages/login/index";
 import Tab from "../pages/tab/index";
 import ServiceIndex from "../pages/services/pitstop-sarana/index";
 import ServiceCreate from "../pages/services/pitstop-sarana/create";
+import LogsheetIndex from "../pages/logsheet/pitstop-sarana/index";
+import LogsheetCreate from "../pages/logsheet/pitstop-sarana/create";
 import PetugasIndex from "../pages/petugas/index";
 import PetugasCreate from "../pages/petugas/create";
 import Sidebar from "../components/sidebar/sidebar"
@@ -17,6 +19,26 @@ const LoginStack = createStackNavigator({
 });
 
 const PageStack = createStackNavigator({
+  LogsheetCreate: { 
+    screen: LogsheetCreate,
+    navigationOptions: () => ({
+      title: 'Tambah Logsheet',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  LogsheetIndex: { 
+    screen: LogsheetIndex,
+    navigationOptions: () => ({
+      title: 'Data Logsheet',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
   TabIndex: { 
     screen: Tab,
     navigationOptions: () => ({

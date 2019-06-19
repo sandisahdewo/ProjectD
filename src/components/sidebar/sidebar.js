@@ -28,7 +28,9 @@ export default class SideBar extends React.Component {
 
             <View style={{flex:1, flexDirection:'row', marginVertical:5, paddingHorizontal: 5}}>
               <Icon name="person" style={{ fontSize:25 }} />
-              <Text style={{fontSize:18, marginLeft:15}}>Petugas</Text>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('PetugasIndex')}>
+                <Text style={{fontSize:18, marginLeft:15}}>Petugas</Text>
+              </TouchableWithoutFeedback>
             </View>
 
             <View style={{borderBottomColor: 'black', borderBottomWidth: 0.5}}></View>

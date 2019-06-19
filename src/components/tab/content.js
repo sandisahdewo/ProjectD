@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Card, CardItem, Body, Text, Button } from 'native-base';
+import { Card, CardItem, Text } from 'native-base';
 
 class TabContent extends Component {
 
