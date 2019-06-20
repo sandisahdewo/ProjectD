@@ -19,6 +19,16 @@ const LoginStack = createStackNavigator({
 });
 
 const PageStack = createStackNavigator({
+  TabIndex: { 
+    screen: Tab,
+    navigationOptions: () => ({
+      title: 'Data Tab',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
   LogsheetCreate: { 
     screen: LogsheetCreate,
     navigationOptions: () => ({
@@ -33,16 +43,6 @@ const PageStack = createStackNavigator({
     screen: LogsheetIndex,
     navigationOptions: () => ({
       title: 'Data Logsheet',
-      headerTintColor: 'white',
-      headerStyle: {
-        backgroundColor: '#3C8DBC',
-      }
-    }) 
-  },
-  TabIndex: { 
-    screen: Tab,
-    navigationOptions: () => ({
-      title: 'Data Tab',
       headerTintColor: 'white',
       headerStyle: {
         backgroundColor: '#3C8DBC',

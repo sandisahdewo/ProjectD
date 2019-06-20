@@ -1,8 +1,14 @@
 import React from "react";
 import { Container, Content, Text, Thumbnail, View, Icon } from "native-base";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-const routes = ["Home", "Chat", "Profile"];
+import { TouchableWithoutFeedback } from 'react-native';
+import BtnSidebar from '../../components/button/sidebar';
+
 export default class SideBar extends React.Component {
+
+  testing = () => {
+    console.warn('Testing')
+  }
+
   render() {
     return (
       <Container>
@@ -16,35 +22,13 @@ export default class SideBar extends React.Component {
             </View>
           </View>
           <View style={{flex:1, marginVertical:7, marginHorizontal: 10}}>
-
-            <View style={{flex:1, flexDirection:'row', marginVertical:5, paddingHorizontal: 5}}>
-              <Icon name="briefcase" style={{ fontSize:25 }} />
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('TabIndex')}>
-                <Text style={{fontSize:18, marginLeft:15}}>Tab</Text>
-              </TouchableWithoutFeedback>
-            </View>
-
-            <View style={{borderBottomColor: 'black', borderBottomWidth: 0.5}}></View>
-
-            <View style={{flex:1, flexDirection:'row', marginVertical:5, paddingHorizontal: 5}}>
-              <Icon name="person" style={{ fontSize:25 }} />
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('PetugasIndex')}>
-                <Text style={{fontSize:18, marginLeft:15}}>Petugas</Text>
-              </TouchableWithoutFeedback>
-            </View>
-
-            <View style={{borderBottomColor: 'black', borderBottomWidth: 0.5}}></View>
-
-            <View style={{flex:1, flexDirection:'row', marginVertical:5, paddingHorizontal: 5}}>
-              <Icon name="key" style={{ fontSize:25 }} />
-              <Text style={{fontSize:18, marginLeft:15}}>Ganti Password</Text>
-            </View>
-            
-            <View style={{borderBottomColor: 'black', borderBottomWidth: 0.5}}></View>
-
+            <BtnSidebar onPress={() => this.props.navigation.navigate('TabIndex')} title="Tab" iconName="briefcase" />
+            <BtnSidebar onPress={() => this.props.navigation.navigate('PetugasIndex')} title="Petugas" iconName="person" />
+            <BtnSidebar onPress={() => this.props.navigation.navigate('TabIndex')} title="Ganti Password" iconName="key" />
           </View>
         </Content>
       </Container>
     );
   }
+
 }

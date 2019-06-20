@@ -5,18 +5,6 @@ import { Button } from 'react-native-elements';
 
 export default class Create extends Component {
 
-	static navigationOptions = ({ navigation }) => {
-    return {
-      headerLeft: (
-        <TouchableHighlight onPress={() => navigation.openDrawer() }>
-          <View style={{marginLeft: 15}}>
-            <Icon name="ios-menu" size={28} style={{ color:'white' }}/>
-          </View>
-        </TouchableHighlight>
-      ),
-    }
-  };
-
 	state = {
     selectedDate: null,
     selectedJenisPetugas: null

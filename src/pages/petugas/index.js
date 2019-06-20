@@ -1,12 +1,20 @@
 import React, {Component} from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableHighlight } from 'react-native';
 import { Container, Content, Card, Icon, Text } from 'native-base';
 import { Button } from 'react-native-elements';
 import ActionButton from 'react-native-action-button';
 
 export default class Index extends Component {
-  static navigationOptions = {
-    drawerLabel: 'Daftar Petugas',
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerLeft: (
+        <TouchableHighlight onPress={() => navigation.openDrawer() }>
+          <View style={{marginLeft: 15}}>
+            <Icon name="ios-menu" size={28} style={{ color:'white' }}/>
+          </View>
+        </TouchableHighlight>
+      ),
+    }
   };
 
   render() {
