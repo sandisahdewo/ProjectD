@@ -23,8 +23,9 @@ export default class SideBar extends React.Component {
           </View>
           <View style={{flex:1, marginVertical:7, marginHorizontal: 10}}>
             <BtnSidebar onPress={() => this.props.navigation.navigate('TabIndex')} title="Tab" iconName="briefcase" />
+            <BtnSidebar onPress={() => this.props.navigation.navigate('ApprovalIndex')} title="Approval" iconName="checkmark" />
             <BtnSidebar onPress={() => this.props.navigation.navigate('PetugasIndex')} title="Petugas" iconName="person" />
-            <BtnSidebar onPress={() => this.props.navigation.navigate('TabIndex')} title="Ganti Password" iconName="key" />
+            {/* <BtnSidebar onPress={() => this.props.navigation.navigate('TabIndex')} title="Ganti Password" iconName="key" /> */}
           </View>
         </Content>
       </Container>

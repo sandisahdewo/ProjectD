@@ -14,7 +14,7 @@ export default class Index extends Component {
       <Container>
         <Content>
           <Card>
-            <TouchableWithoutFeedback style={{backgroundColor:'blue'}} onPress={() => this.props.navigation.navigate('LogsheetIndex')}>
+            <TouchableWithoutFeedback style={{backgroundColor:'blue'}} onPress={() => this.props.navigation.navigate('LogsheetPitstopSaranaIndex')}>
               <View style={{flex:1, paddingHorizontal:10, paddingVertical:10}}>
                 <View>
                   <View style={{flex:1, flexDirection:'row', justifyContent:'space-between'}}>

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {
-  Text, View, StatusBar, KeyboardAvoidingView
+  Text, View, KeyboardAvoidingView
 } from 'react-native';
 import { Container, Item, Input, Icon, Button } from 'native-base';
 
@@ -23,8 +23,8 @@ export default class Index extends Component {
               <Icon active name='lock' />
               <Input placeholder='Password'/>
             </Item>
-            <View style={{flex:1, marginTop:10}}>
-              <Button block info style={{height:40, paddingHorizontal:20}}
+            <View style={{marginTop:10}}>
+              <Button block info style={{backgroundColor:"#2089dc", height:40, paddingHorizontal:20}}
                onPress={() => this.props.navigation.navigate('TabIndex')}
               >
                 <Text style={{color:'white', fontSize:16, fontWeight:'bold'}}> Login </Text>

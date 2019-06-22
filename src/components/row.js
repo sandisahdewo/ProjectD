@@ -1,23 +1,17 @@
 import React, {Component} from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 
 class Row extends Component {
 
   render() {
+    let justifyContent = (this.props.justifyContent) ? this.props.justifyContent : 'space-between';
     return (
-			<View style={[styles.default,  this.props.style]}>
+			<View style={[{flex:1, flexDirection:'row', justifyContent:justifyContent},  this.props.style]}>
         {this.props.children}
       </View>
     )
   }
 }
 
-const styles = StyleSheet.create({
-  default: {
-    flex:1, 
-    flexDirection:'row', 
-    justifyContent:'space-between'
-  }
-});
 
 export default Row;

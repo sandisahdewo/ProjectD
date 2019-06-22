@@ -24,15 +24,15 @@ export default class Index extends Component {
 
           <TabContent title="Maintank Inlet">
             <Body style={style.tabContentBody}>
-              <TabContentButton text="Line 1"/>
-              <TabContentButton text="Line 2"/>
+              <TabContentButton text="Line 1" onPress={() => this.props.navigation.navigate('ServiceMaintankInletIndex')}/>
+              <TabContentButton text="Line 2" onPress={() => this.props.navigation.navigate('ServiceMaintankInletIndex')} />
             </Body>
           </TabContent>
 
           <TabContent title="Pitstop Sarana 1">
             <Body style={style.tabContentBody}>
-              <TabContentButton text="Line 1" onPress={() => this.props.navigation.navigate('ServiceIndex')}/>
-              <TabContentButton text="Line 2" onPress={() => this.props.navigation.navigate('PetugasIndex')} />
+              <TabContentButton text="Line 1" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaIndex')}/>
+              <TabContentButton text="Line 2" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaIndex')} />
             </Body>
           </TabContent>
 

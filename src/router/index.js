@@ -1,12 +1,28 @@
 import React from 'react';
 import Login from "../pages/login/index";
 import Tab from "../pages/tab/index";
-import ServiceIndex from "../pages/services/pitstop-sarana/index";
-import ServiceCreate from "../pages/services/pitstop-sarana/create";
-import LogsheetIndex from "../pages/logsheet/pitstop-sarana/index";
-import LogsheetCreate from "../pages/logsheet/pitstop-sarana/create";
+
+import ServicePitstopSaranaIndex from "../pages/services/pitstop-sarana/index";
+import ServicePitstopSaranaCreate from "../pages/services/pitstop-sarana/create";
+import LogsheetPitstopSaranaIndex from "../pages/logsheet/pitstop-sarana/index";
+import LogsheetPitstopSaranaCreate from "../pages/logsheet/pitstop-sarana/create";
+
+import ServiceMaintankInletIndex from "../pages/services/maintank-inlet/index";
+import ServiceMaintankInletCreate from "../pages/services/maintank-inlet/create";
+import ServiceMaintankInletEdit from "../pages/services/maintank-inlet/edit";
+import LogsheetMaintankInletIndex from "../pages/logsheet/maintank-inlet/index";
+import LogsheetMaintankInletCreate from "../pages/logsheet/maintank-inlet/create";
+import LogsheetMaintankInletEdit from "../pages/logsheet/maintank-inlet/edit";
+
+import ApprovalIndex from "../pages/approval/index";
+
+import ApprovalMaintankInletIndex from "../pages/approval/maintank-inlet/index";
+import ApprovalMaintankInletDetail from "../pages/approval/maintank-inlet/detail";
+
 import PetugasIndex from "../pages/petugas/index";
 import PetugasCreate from "../pages/petugas/create";
+import PetugasEdit from "../pages/petugas/edit";
+
 import Sidebar from "../components/sidebar/sidebar"
 import { createSwitchNavigator, createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation';
 
@@ -29,8 +45,101 @@ const PageStack = createStackNavigator({
       }
     }) 
   },
-  LogsheetCreate: { 
-    screen: LogsheetCreate,
+
+  ApprovalIndex: { 
+    screen: ApprovalIndex,
+    navigationOptions: () => ({
+      title: 'Pilih Tabs',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  ApprovalMaintankInletIndex: { 
+    screen: ApprovalMaintankInletIndex,
+    navigationOptions: () => ({
+      title: 'Daftar Maintank Inlet',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  ApprovalMaintankInletDetail: { 
+    screen: ApprovalMaintankInletDetail,
+    navigationOptions: () => ({
+      title: 'Detail Maintank Inlet',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  
+  LogsheetMaintankInletIndex: { 
+    screen: LogsheetMaintankInletIndex,
+    navigationOptions: () => ({
+      title: 'Daftar Logsheet',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  LogsheetMaintankInletCreate: { 
+    screen: LogsheetMaintankInletCreate,
+    navigationOptions: () => ({
+      title: 'Tambah Logheet Maintank Inlet',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  LogsheetMaintankInletEdit: { 
+    screen: LogsheetMaintankInletEdit,
+    navigationOptions: () => ({
+      title: 'Edit Logheet Maintank Inlet',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  ServiceMaintankInletIndex: { 
+    screen: ServiceMaintankInletIndex,
+    navigationOptions: () => ({
+      title: 'Service Maintank Inlet',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  ServiceMaintankInletCreate: { 
+    screen: ServiceMaintankInletCreate,
+    navigationOptions: () => ({
+      title: 'Tambah Service',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  ServiceMaintankInletEdit: { 
+    screen: ServiceMaintankInletEdit,
+    navigationOptions: () => ({
+      title: 'Edit Service',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+
+  LogsheetPitstopSaranaCreate: { 
+    screen: LogsheetPitstopSaranaCreate,
     navigationOptions: () => ({
       title: 'Tambah Logsheet',
       headerTintColor: 'white',
@@ -39,8 +148,8 @@ const PageStack = createStackNavigator({
       }
     }) 
   },
-  LogsheetIndex: { 
-    screen: LogsheetIndex,
+  LogsheetPitstopSaranaIndex: { 
+    screen: LogsheetPitstopSaranaIndex,
     navigationOptions: () => ({
       title: 'Data Logsheet',
       headerTintColor: 'white',
@@ -49,8 +158,8 @@ const PageStack = createStackNavigator({
       }
     }) 
   },
-  ServiceIndex: { 
-    screen: ServiceIndex,
+  ServicePitstopSaranaIndex: { 
+    screen: ServicePitstopSaranaIndex,
     navigationOptions: () => ({
       title: 'Data Service',
       headerTintColor: 'white',
@@ -59,8 +168,8 @@ const PageStack = createStackNavigator({
       }
     }) 
   },
-  ServiceCreate: { 
-    screen: ServiceCreate,
+  ServicePitstopSaranaCreate: { 
+    screen: ServicePitstopSaranaCreate,
     navigationOptions: () => ({
       title: 'Data Service',
       headerTintColor: 'white',
@@ -89,6 +198,16 @@ const PageStack = createStackNavigator({
       }
     }) 
   },
+  PetugasEdit: { 
+    screen: PetugasEdit,
+    navigationOptions: () => ({
+      title: 'Edit Petugas',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
 });
 
 const DrawerNavigator = createDrawerNavigator({
@@ -103,7 +222,7 @@ const SwitchNavigator = createSwitchNavigator({
   Login: LoginStack
 },
 {
-  initialRouteName: 'App',
+  initialRouteName: 'Login',
 });
 
 const Nav = createAppContainer(SwitchNavigator)

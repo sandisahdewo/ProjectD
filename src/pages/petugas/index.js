@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, StyleSheet, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, TouchableHighlight, FlatList, TouchableWithoutFeedback } from 'react-native';
 import { Container, Content, Card, Icon, Text } from 'native-base';
 import { Button } from 'react-native-elements';
 import ActionButton from 'react-native-action-button';
@@ -17,152 +17,69 @@ export default class Index extends Component {
     }
   };
 
+  keyExtractor = (item, index) => index.toString();
+
+  renderItem = ({ item }) => (
+    <Card>
+      <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('PetugasEdit')}>
+        <View style={{flex:1, paddingHorizontal:10, paddingVertical:10}}>
+          <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+            <View style={{flexDirection:'column', paddingRight:15}}>
+              <View>
+                <Text style={{fontSize:14, fontWeight:'bold'}}>Nama</Text>
+                <Text style={{fontSize:12}}>{item.nama}</Text>
+              </View>
+              <View style={{marginTop:10}}>
+                <Text style={{fontSize:14, fontWeight:'bold'}}>Tanggal Lahir</Text>
+                <Text style={{fontSize:12}}>{item.tanggal_lahir}</Text>
+              </View>
+            </View>
+            <View style={{flexDirection:'column'}}>
+              <View>
+                <Text style={{fontSize:14, fontWeight:'bold'}}>Alamat</Text>
+                <Text style={{fontSize:12}}>{item.alamat}</Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={{flex:1, flexDirection:'row', marginTop:10, justifyContent:'space-between', borderTopColor:'black', borderTopWidth:0.5, paddingTop:5}}>
+            <View style={{flexDirection:'column'}}>
+              {(item.status == 'active') &&
+                <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
+                  <Icon name='checkmark' style={{fontSize:19, marginRight:10, color:'green'}} />
+                  <Text style={{fontSize:14, color:'green'}}>Active</Text>
+                </View>
+              }{(item.status == 'non-active') &&
+                <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
+                  <Icon name='close' style={{fontSize:19, marginRight:10, color:'red'}} />
+                  <Text style={{fontSize:14, color:'red'}}>Non Active</Text>
+                </View>
+              }
+            </View>
+            <View style={{flexDirection:'column'}}>
+              {(item.status == 'active') &&
+                <Button title="Disable?" icon={{ name:'close', size:19, color:'white' }} fontSize={8} buttonStyle={{padding:3, paddingRight:10, backgroundColor:'red', borderRadius:0}} />
+              }{(item.status == 'non-active') &&
+                <Button title="Activate?" icon={{ name:'check', size:19, color:'white' }} fontSize={8} buttonStyle={{padding:3, paddingRight:10, backgroundColor:'green', borderRadius:0}} />
+              }
+            </View>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </Card>
+  );
+
   render() {
     return (
       <Container>
         <Content>
-          <Card>
-            <View style={{flex:1, paddingHorizontal:10, paddingVertical:10}}>
-              <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-                <View style={{flexDirection:'column', paddingRight:15}}>
-                  <View>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>Nama</Text>
-                    <Text style={{fontSize:12}}>Sandi Sahdewo</Text>
-                  </View>
-                  <View style={{marginTop:10}}>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>Tanggal Lahir</Text>
-                    <Text style={{fontSize:12}}>09 Januari 1998</Text>
-                  </View>
-                </View>
-                <View style={{flexDirection:'column'}}>
-                  <View>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>Alamat</Text>
-                    <Text style={{fontSize:12}}>Wateskroyo, Besuki, Tulungagung</Text>
-                  </View>
-                </View>
-              </View>
-
-              <View style={{flex:1, flexDirection:'row', marginTop:10, justifyContent:'space-between', borderTopColor:'black', borderTopWidth:0.5, paddingTop:5}}>
-                <View style={{flexDirection:'column'}}>
-                  <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
-                    <Icon name='checkmark' style={{fontSize:19, marginRight:10, color:'green'}} />
-                    <Text style={{fontSize:14, color:'green'}}>Active</Text>
-                  </View>
-                </View>
-                <View style={{flexDirection:'column'}}>
-                  <Button title="Disabled" icon={{ name:'close', size:19, color:'white' }} fontSize={8} buttonStyle={{padding:3, paddingRight:10, backgroundColor:'red', borderRadius:0}} />
-                </View>
-              </View>
-            </View>
-          </Card>
-
-          <Card>
-            <View style={{flex:1, paddingHorizontal:10, paddingVertical:10}}>
-              <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-                <View style={{flexDirection:'column', paddingRight:15}}>
-                  <View>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>Nama</Text>
-                    <Text style={{fontSize:12}}>Sandi Sahdewo</Text>
-                  </View>
-                  <View style={{marginTop:10}}>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>Tanggal Lahir</Text>
-                    <Text style={{fontSize:12}}>09 Januari 1998</Text>
-                  </View>
-                </View>
-                <View style={{flexDirection:'column'}}>
-                  <View>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>Alamat</Text>
-                    <Text style={{fontSize:12}}>Wateskroyo, Besuki, Tulungagung</Text>
-                  </View>
-                </View>
-              </View>
-
-              <View style={{flex:1, flexDirection:'row', marginTop:10, justifyContent:'space-between', borderTopColor:'black', borderTopWidth:0.5, paddingTop:5}}>
-                <View style={{flexDirection:'column'}}>
-                  <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
-                    <Icon name='close' style={{fontSize:19, marginRight:10, color:'red'}} />
-                    <Text style={{fontSize:14, color:'red'}}>Disabled</Text>
-                  </View>
-                </View>
-                <View style={{flexDirection:'column'}}>
-                  <Button title="Activated" icon={{ name:'check', size:19, color:'white' }} fontSize={8} buttonStyle={{padding:3, paddingRight:10, backgroundColor:'green', borderRadius:0}} />
-                </View>
-              </View>
-            </View>
-          </Card>
-
-          <Card>
-            <View style={{flex:1, paddingHorizontal:10, paddingVertical:10}}>
-              <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-                <View style={{flexDirection:'column', paddingRight:15}}>
-                  <View>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>Nama</Text>
-                    <Text style={{fontSize:12}}>Sandi Sahdewo</Text>
-                  </View>
-                  <View style={{marginTop:10}}>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>Tanggal Lahir</Text>
-                    <Text style={{fontSize:12}}>09 Januari 1998</Text>
-                  </View>
-                </View>
-                <View style={{flexDirection:'column'}}>
-                  <View>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>Alamat</Text>
-                    <Text style={{fontSize:12}}>Wateskroyo, Besuki, Tulungagung</Text>
-                  </View>
-                </View>
-              </View>
-
-              <View style={{flex:1, flexDirection:'row', marginTop:10, justifyContent:'space-between', borderTopColor:'black', borderTopWidth:0.5, paddingTop:5}}>
-                <View style={{flexDirection:'column'}}>
-                  <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
-                    <Icon name='close' style={{fontSize:19, marginRight:10, color:'red'}} />
-                    <Text style={{fontSize:14, color:'red'}}>Disabled</Text>
-                  </View>
-                </View>
-                <View style={{flexDirection:'column'}}>
-                  <Button title="Activated" icon={{ name:'check', size:19, color:'white' }} fontSize={8} buttonStyle={{padding:3, paddingRight:10, backgroundColor:'green', borderRadius:0}} />
-                </View>
-              </View>
-            </View>
-          </Card>
-
-          <Card>
-            <View style={{flex:1, paddingHorizontal:10, paddingVertical:10}}>
-              <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-                <View style={{flexDirection:'column', paddingRight:15}}>
-                  <View>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>Nama</Text>
-                    <Text style={{fontSize:12}}>Sandi Sahdewo</Text>
-                  </View>
-                  <View style={{marginTop:10}}>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>Tanggal Lahir</Text>
-                    <Text style={{fontSize:12}}>09 Januari 1998</Text>
-                  </View>
-                </View>
-                <View style={{flexDirection:'column'}}>
-                  <View>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>Alamat</Text>
-                    <Text style={{fontSize:12}}>Wateskroyo, Besuki, Tulungagung</Text>
-                  </View>
-                </View>
-              </View>
-
-              <View style={{flex:1, flexDirection:'row', marginTop:10, justifyContent:'space-between', borderTopColor:'black', borderTopWidth:0.5, paddingTop:5}}>
-                <View style={{flexDirection:'column'}}>
-                  <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
-                    <Icon name='close' style={{fontSize:19, marginRight:10, color:'red'}} />
-                    <Text style={{fontSize:14, color:'red'}}>Disabled</Text>
-                  </View>
-                </View>
-                <View style={{flexDirection:'column'}}>
-                  <Button title="Activated" icon={{ name:'check', size:19, color:'white' }} fontSize={8} buttonStyle={{padding:3, paddingRight:10, backgroundColor:'green', borderRadius:0}} />
-                </View>
-              </View>
-            </View>
-          </Card>
-
+          <FlatList
+						keyExtractor={this.keyExtractor}
+						data={list}
+						renderItem={this.renderItem}
+					/>
         </Content>
-          <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => this.props.navigation.navigate('PetugasCreate')} />
+          <ActionButton buttonColor="#2089dc" onPress={() => this.props.navigation.navigate('PetugasCreate')} />
       </Container>
     );
   }
@@ -175,3 +92,18 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 })
+
+const list = [
+  {
+    nama: 'Sandi Sahdewo',
+    alamat: 'Wateskroyo, Besuki, Tulungagung', 
+    tanggal_lahir: '09 Januari 1995',
+    status: 'active'
+  },
+  {
+    nama: 'Sandi Sahdewo',
+    alamat: 'Wateskroyo, Besuki, Tulungagung', 
+    tanggal_lahir: '09 Januari 1995',
+    status: 'non-active'
+  }
+];
