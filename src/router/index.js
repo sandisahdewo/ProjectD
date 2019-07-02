@@ -35,6 +35,18 @@ const LoginStack = createStackNavigator({
 });
 
 const PageStack = createStackNavigator({
+  PetugasIndex: { 
+    screen: PetugasIndex,
+    navigationOptions: () => ({
+      title: 'Data Petugas',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+
+  
   TabIndex: { 
     screen: Tab,
     navigationOptions: () => ({
@@ -222,7 +234,7 @@ const SwitchNavigator = createSwitchNavigator({
   Login: LoginStack
 },
 {
-  initialRouteName: 'Login',
+  initialRouteName: 'App',
 });
 
 const Nav = createAppContainer(SwitchNavigator)
