@@ -28,7 +28,7 @@ export default class Create extends Component {
   }
 
   save = () => {
-    const dataForm = {
+    const formData = {
       nama: this.state.nama,
       username: this.state.username,
       tanggal_lahir: this.state.tanggal_lahir,
@@ -37,7 +37,7 @@ export default class Create extends Component {
       peran: this.state.peran
     }
 
-    ServicePetugas.savePetugas(dataForm)
+    ServicePetugas.savePetugas(formData)
       .then(res => {
         if(res.message == 'success') {
           this.resetForm();

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { View, Text, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { Container, Content, Card, Item, Input, Label, Picker, Icon, Toast} from 'native-base';
 import { Button } from 'react-native-elements';
+import { format } from 'date-fns';
 import ServicePitstopSarana from '../../../services/pitstop-sarana';
 import InputFloatingLabelWithValidation from '../../../components/input/FloatingLabelWithValidation'
 import DateFloatingLabelWithValidation from '../../../components/input/DateFloatingLabelWithValidation'
@@ -24,6 +25,7 @@ export default class Create extends Component {
     super(props);
 
     this.state = {
+      id: '',
       line: 'line 1',
       driver: '',
       fuelman: '',
@@ -37,6 +39,11 @@ export default class Create extends Component {
         fuelman: '',
       }
     }
+  }
+
+  componentDidMount() {
+    const id = this.props.navigation.state.params.id;
+    this.find(id);
   }
 
   render() {
@@ -69,9 +76,9 @@ export default class Create extends Component {
                 <View style={{borderBottomWidth:1, borderBottomColor:'#ccc'}}></View>
                 <View style={{marginTop:10, marginHorizontal:6}}>
 
-                  <InputFloatingLabelWithValidation title='Driver' onChangeText={(driver) => this.setState({driver})} error={this.state.validation.driver} />
-                  <InputFloatingLabelWithValidation title='Fuelman' onChangeText={(fuelman) => this.setState({fuelman})} error={this.state.validation.fuelman} />
-                  <DateFloatingLabelWithValidation title='Tanggal' setDefaultValue onSelected={(tanggal) => this.setState({tanggal})} error={this.state.validation.tanggal} />
+                  <InputFloatingLabelWithValidation title='Driver' value={this.state.driver} onChangeText={(driver) => this.setState({driver})} error={this.state.validation.driver} />
+                  <InputFloatingLabelWithValidation title='Fuelman' value={this.state.fuelman} onChangeText={(fuelman) => this.setState({fuelman})} error={this.state.validation.fuelman} />
+                  <DateFloatingLabelWithValidation title='Tanggal' onSelected={(tanggal) => this.setState({tanggal})} error={this.state.validation.tanggal} />
 
                   <View style={{marginBottom:7}}>
                     <Item>
@@ -106,14 +113,14 @@ export default class Create extends Component {
                 </View>
                 <View style={{borderBottomWidth:1, borderBottomColor:'#ccc'}}></View>
                 <View style={{marginTop:10, marginHorizontal:6}}>
-                  <InputFloatingLabelWithValidation title='WHS Number' onChangeText={(whs_number) => this.setState({whs_number})} error={this.state.validation.whs_number} />
-                  <InputFloatingLabelWithValidation title='Location' onChangeText={(location) => this.setState({location})} error={this.state.validation.location} />
+                  <InputFloatingLabelWithValidation value={this.state.whs_number} title='WHS Number' onChangeText={(whs_number) => this.setState({whs_number})} error={this.state.validation.whs_number} />
+                  <InputFloatingLabelWithValidation value={this.state.location} title='Location' onChangeText={(location) => this.setState({location})} error={this.state.validation.location} />
                 </View>
               </View>
             </Card>
 
             <View style={{flex:1, height:100, marginHorizontal:5}}>
-              <Button onPress={() => this.post()} title='Simpan'></Button>
+              <Button onPress={() => this.update()} title='Perbarui'></Button>
             </View>
           </KeyboardAvoidingView>
         </Content>
@@ -121,44 +128,55 @@ export default class Create extends Component {
     );
   }
 
-  post = () => {
-    this.setState({
-      validation: {}
-    })
-    
+  find = async (id) => {
+    await ServicePitstopSarana.findServiceById(id)
+      .then(res => {
+        this.setState({
+          id: id,
+          line: res.line,
+          driver: res.driver,
+          fuelman: res.fuelman,
+          tanggal: res.tanggal,
+          shift: res.shift,
+          whs_number: res.whs_number,
+          location: res.location,
+        })
+
+      })
+      .catch(err => {
+        console.log(err)
+      })
+
+  }
+
+  update = () => {
     const formData = {
       line: this.state.line,
       driver: this.state.driver,
-      fuelman: this.state.fuelman,
       tanggal: this.state.tanggal,
       shift: this.state.shift,
       whs_number: this.state.whs_number,
       lokasi: this.state.location,
     } 
 
-    ServicePitstopSarana.storeService(formData)
+    ServicePitstopSarana.updateService(formData, this.state.id)
       .then(res => {
         if(res.success) {
           Toast.show({
-            text: 'Berhasil menyimpan service pitstop sarana!',
+            text: 'Berhasil memperbarui service pitstop sarana!',
             buttonText: 'Okay',
             type:'success'
           })
-          this.props.navigation.navigate('ServicePitstopSaranaIndex')
         }
       })
       .catch(err => {
+        console.log(err)
         const validationMessage = err.response.data.errors;
         this.setState({
           validation: {
             driver: validationMessage.driver,
             fuelman: validationMessage.fuelman
           }
-        })
-        Toast.show({
-          text: 'Gagal menyimpan service pitstop sarana!',
-          buttonText: 'Coba Lagi',
-          type:'danger'
         })
       });
   }

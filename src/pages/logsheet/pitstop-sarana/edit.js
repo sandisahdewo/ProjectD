@@ -7,7 +7,7 @@ import ServiceUnit from '../../../services/unit';
 import ServicePitstopSarana from '../../../services/pitstop-sarana';
 import { Container, Content, Card, Item, Label, Icon, Input, Toast } from 'native-base';
 import InputFloatingLabelWithValidation from '../../../components/input/FloatingLabelWithValidation'
-import { View, Text, KeyboardAvoidingView, StyleSheet, TimePickerAndroid, FlatList, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, KeyboardAvoidingView, StyleSheet, FlatList, TouchableWithoutFeedback } from 'react-native';
 
 export default class Create extends Component {
 
@@ -48,10 +48,8 @@ export default class Create extends Component {
   }
 
   componentDidMount = () => {
-    this.setState({
-      tanggal: format(new Date(), 'DD-MM-YYYY'),
-      jam: format(new Date(), 'HH:mm:ss'),
-    })
+    const id = this.props.navigation.state.params.id;
+    this.find(id);
   }
 
   keyExtractorModal = (item, index) => index.toString()
@@ -127,7 +125,7 @@ export default class Create extends Component {
                 <View style={{marginTop:10, marginHorizontal:6}}>
                   <InputFloatingLabelWithValidation title='Jatah Solar' value={this.state.jatah_solar} error={this.state.validation.jatah_solar} disabled/>
 
-                  <InputFloatingLabelWithValidation title='QTY Solar' onChangeText={(qty_solar) => this.setState({qty_solar})} error={this.state.validation.qty_solar} keyboardType='number-pad'/>
+                  <InputFloatingLabelWithValidation title='QTY Solar' value={this.state.qty_solar} onChangeText={(qty_solar) => this.setState({qty_solar})} error={this.state.validation.qty_solar} keyboardType='number-pad'/>
                 </View>
               </View>
             </Card>
@@ -141,7 +139,7 @@ export default class Create extends Component {
                 </View>
                 <View style={{borderBottomWidth:1, borderBottomColor:'#ccc'}}></View>
                 <View style={{marginTop:10, marginHorizontal:6}}>
-                  <InputFloatingLabelWithValidation title='Nama User' onChangeText={(nama_user) => this.setState({nama_user})} error={this.state.validation.nama_user}/>
+                  <InputFloatingLabelWithValidation title='Nama User' value={this.state.nama_user} onChangeText={(nama_user) => this.setState({nama_user})} error={this.state.validation.nama_user}/>
                 </View>
               </View>
             </Card>
@@ -155,15 +153,15 @@ export default class Create extends Component {
                 </View>
                 <View style={{borderBottomWidth:1, borderBottomColor:'#ccc'}}></View>
                 <View style={{marginTop:10, marginHorizontal:6}}>
-                  <InputFloatingLabelWithValidation title='Flow Meter Awal' onChangeText={(flow_meter_awal) => this.setFlowMeterAwal(flow_meter_awal) } error={this.state.validation.flow_meter_awal} keyboardType='number-pad'/>
-                  <InputFloatingLabelWithValidation title='Flow Meter Akhir' onChangeText={(flow_meter_akhir) => this.setFlowMeterAkhir(flow_meter_akhir) } error={this.state.validation.flow_meter_akhir} keyboardType='number-pad'/>
-                  <InputFloatingLabelWithValidation title='Selisih Flow Meter' value={this.state.selisih_flow_meter} error={this.state.validation.flow_meter_akhir} disabled/>
+                  <InputFloatingLabelWithValidation title='Flow Meter Awal' value={this.state.flow_meter_awal} onChangeText={(flow_meter_awal) => this.setFlowMeterAwal(flow_meter_awal) } error={this.state.validation.flow_meter_awal} keyboardType='number-pad'/>
+                  <InputFloatingLabelWithValidation title='Flow Meter Akhir' value={this.state.flow_meter_akhir} onChangeText={(flow_meter_akhir) => this.setFlowMeterAkhir(flow_meter_akhir) } error={this.state.validation.flow_meter_akhir} keyboardType='number-pad'/>
+                  <InputFloatingLabelWithValidation title='Selisih Flow Meter' value={this.state.selisih_flow_meter} error={this.state.validation.selisih_flow_meter} disabled/>
                 </View>
               </View>
             </Card>
 
             <View style={{flex:1, height:100, marginHorizontal:5}}>
-              <Button title='Simpan' onPress={() => this.store()}></Button>
+              <Button title='Perbarui' onPress={() => this.update(this.state.id)}></Button>
             </View>
 
             <Modal isVisible={this.state.showModal} 
@@ -203,6 +201,35 @@ export default class Create extends Component {
         </Content>
       </Container>
     );
+  }
+
+  find = (id) => {
+    ServicePitstopSarana.findLogsheetById(id)
+      .then(res => {
+        this.setState({
+          id: res.id,
+          tanggal: res.tanggal_view,
+          jam: res.jam,
+          pitstop_sarana_id: res.pitstop_sarana_id,
+          kode_unit: res.kode_unit,
+          tipe_unit: res.model_unit,
+          no_polisi: res.no_polisi,
+          hm_km: String(res.hm_km),
+          qty_solar: String(res.qty_solar),
+          jatah_solar: String(res.jatah_solar),
+          nama_user: res.nama_user,
+          flow_meter_awal: String(res.flow_meter_awal),
+          flow_meter_akhir: String(res.flow_meter_akhir),
+          selisih_flow_meter: String(res.qty_flow_meter),
+        })
+      })
+      .catch(err => {
+        Toast.show({
+          text: err.text,
+          buttonText: 'Okay',
+          type:'danger'
+        })
+      })
   }
 
   toggleModal = () => {
@@ -272,8 +299,9 @@ export default class Create extends Component {
     }
   }
 
-  store = () => {
+  update = (id) => {
     const pitstopSaranaId = this.props.navigation.state.params.pitstopSaranaId;
+
     const formData = {
       pitstop_sarana_id: pitstopSaranaId,
       jam: this.state.jam,
@@ -287,11 +315,11 @@ export default class Create extends Component {
       selisih_flow_meter: this.state.selisih_flow_meter,
     }
 
-    ServicePitstopSarana.storeLogsheet(formData)
+    ServicePitstopSarana.updateLogsheet(formData, id)
       .then(res => {
         if(res.success) {
           Toast.show({
-            text: 'Berhasil menyimpan logsheet pitstop sarana!',
+            text: 'Berhasil memperbarui logsheet pitstop sarana!',
             buttonText: 'Okay',
             type:'success'
           })
@@ -317,7 +345,7 @@ export default class Create extends Component {
           })
         } else {
           Toast.show({
-            text: 'Gagal menyimpan logsheet pitstop sarana!',
+            text: err.message,
             buttonText: 'Okay',
             type:'danger'
           })

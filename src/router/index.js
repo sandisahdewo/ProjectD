@@ -4,8 +4,10 @@ import Tab from "../pages/tab/index";
 
 import ServicePitstopSaranaIndex from "../pages/services/pitstop-sarana/index";
 import ServicePitstopSaranaCreate from "../pages/services/pitstop-sarana/create";
+import ServicePitstopSaranaEdit from "../pages/services/pitstop-sarana/edit";
 import LogsheetPitstopSaranaIndex from "../pages/logsheet/pitstop-sarana/index";
 import LogsheetPitstopSaranaCreate from "../pages/logsheet/pitstop-sarana/create";
+import LogsheetPitstopSaranaEdit from "../pages/logsheet/pitstop-sarana/edit";
 
 import ServiceMaintankInletIndex from "../pages/services/maintank-inlet/index";
 import ServiceMaintankInletCreate from "../pages/services/maintank-inlet/create";
@@ -35,18 +37,6 @@ const LoginStack = createStackNavigator({
 });
 
 const PageStack = createStackNavigator({
-  PetugasIndex: { 
-    screen: PetugasIndex,
-    navigationOptions: () => ({
-      title: 'Data Petugas',
-      headerTintColor: 'white',
-      headerStyle: {
-        backgroundColor: '#3C8DBC',
-      }
-    }) 
-  },
-
-  
   TabIndex: { 
     screen: Tab,
     navigationOptions: () => ({
@@ -150,26 +140,6 @@ const PageStack = createStackNavigator({
     }) 
   },
 
-  LogsheetPitstopSaranaCreate: { 
-    screen: LogsheetPitstopSaranaCreate,
-    navigationOptions: () => ({
-      title: 'Tambah Logsheet',
-      headerTintColor: 'white',
-      headerStyle: {
-        backgroundColor: '#3C8DBC',
-      }
-    }) 
-  },
-  LogsheetPitstopSaranaIndex: { 
-    screen: LogsheetPitstopSaranaIndex,
-    navigationOptions: () => ({
-      title: 'Data Logsheet',
-      headerTintColor: 'white',
-      headerStyle: {
-        backgroundColor: '#3C8DBC',
-      }
-    }) 
-  },
   ServicePitstopSaranaIndex: { 
     screen: ServicePitstopSaranaIndex,
     navigationOptions: () => ({
@@ -190,6 +160,47 @@ const PageStack = createStackNavigator({
       }
     }) 
   },
+  ServicePitstopSaranaEdit: { 
+    screen: ServicePitstopSaranaEdit,
+    navigationOptions: () => ({
+      title: 'Edit Service Pitstop Sarana',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  LogsheetPitstopSaranaIndex: { 
+    screen: LogsheetPitstopSaranaIndex,
+    navigationOptions: () => ({
+      title: 'Data Logsheet',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  LogsheetPitstopSaranaCreate: { 
+    screen: LogsheetPitstopSaranaCreate,
+    navigationOptions: () => ({
+      title: 'Tambah Logsheet',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  LogsheetPitstopSaranaEdit: { 
+    screen: LogsheetPitstopSaranaEdit,
+    navigationOptions: () => ({
+      title: 'Edit Logsheet',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  
   PetugasIndex: { 
     screen: PetugasIndex,
     navigationOptions: () => ({
