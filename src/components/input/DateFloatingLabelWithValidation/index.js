@@ -32,7 +32,7 @@ class DateFloatingLabelWithValidation extends Component {
           <Label 
             style={[hasError ? styles.labelError : styles.label]}
           >{this.props.title}</Label>
-          <Input value={this.state.value} onTouchStart={() => this.setDateAndroid()} />
+          <Input value={this.props.value} onTouchStart={() => this.setDateAndroid()} />
         </Item>
         <Text style={{color:'red', fontSize:10, paddingLeft:3}}>{this.props.error}</Text>
       </View>

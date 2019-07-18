@@ -18,6 +18,9 @@ import LogsheetMaintankInletEdit from "../pages/logsheet/maintank-inlet/edit";
 
 import ApprovalIndex from "../pages/approval/index";
 
+import ApprovalPitstopSaranaIndex from "../pages/approval/pitstop-sarana/index";
+import ApprovalPitstopSaranaDetail from "../pages/approval/pitstop-sarana/detail";
+
 import ApprovalMaintankInletIndex from "../pages/approval/maintank-inlet/index";
 import ApprovalMaintankInletDetail from "../pages/approval/maintank-inlet/detail";
 
@@ -58,6 +61,28 @@ const PageStack = createStackNavigator({
       }
     }) 
   },
+  
+  ApprovalPitstopSaranaIndex: { 
+    screen: ApprovalPitstopSaranaIndex,
+    navigationOptions: () => ({
+      title: 'Daftar Pitstop Sarana',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  ApprovalPitstopSaranaDetail: { 
+    screen: ApprovalPitstopSaranaDetail,
+    navigationOptions: () => ({
+      title: 'Detail Pitstop Sarana',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+
   ApprovalMaintankInletIndex: { 
     screen: ApprovalMaintankInletIndex,
     navigationOptions: () => ({
@@ -245,7 +270,7 @@ const SwitchNavigator = createSwitchNavigator({
   Login: LoginStack
 },
 {
-  initialRouteName: 'App',
+  initialRouteName: 'Login',
 });
 
 const Nav = createAppContainer(SwitchNavigator)

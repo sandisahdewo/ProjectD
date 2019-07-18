@@ -3,6 +3,7 @@ import { View, StyleSheet, TouchableHighlight } from 'react-native';
 import { Container, Body, Content, Icon } from 'native-base';
 import TabContent from '../../components/tab/content'
 import TabContentButton from '../../components/tab/content-button'
+import Identity from '../../services/config/identity'
 
 export default class Index extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -16,6 +17,17 @@ export default class Index extends Component {
       ),
     }
   };
+
+  constructor(props) {
+    super(props)
+    this.setAccessToken();
+        // const acc = Identity.getAccessToken()
+        // console.log('acc', acc)
+  }
+
+  setAccessToken = async () => {
+    await Identity.setAccessToken();
+  }
 
   render() {
     return (
@@ -31,15 +43,15 @@ export default class Index extends Component {
 
           <TabContent title="Pitstop Sarana 1">
             <Body style={style.tabContentBody}>
-              <TabContentButton text="Line 1" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaIndex', { line: 'Line 1' })}/>
-              <TabContentButton text="Line 2" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaIndex', { line: 'Line 2' })} />
+              <TabContentButton text="Line 1" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaIndex', { pitstopSaranaNomor: 1, line: 'Line 1' })}/>
+              <TabContentButton text="Line 2" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaIndex', { pitstopSaranaNomor: 1, line: 'Line 2' })} />
             </Body>
           </TabContent>
 
           <TabContent title="Pitstop Sarana 2">
             <Body style={style.tabContentBody}>
-              <TabContentButton text="Line 1"/>
-              <TabContentButton text="Line 2"/>
+              <TabContentButton text="Line 1" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaIndex', { pitstopSaranaNomor: 2, line: 'Line 1' })}/>
+              <TabContentButton text="Line 2" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaIndex', { pitstopSaranaNomor: 2, line: 'Line 2' })} />
             </Body>
           </TabContent>
 

@@ -1,4 +1,4 @@
-import Get from './get'
+import {Get} from './methods';
 
 const search = (query) => Get(`unit/search?q=${query}`);
 

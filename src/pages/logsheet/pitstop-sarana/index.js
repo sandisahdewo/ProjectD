@@ -13,7 +13,6 @@ import RowContainerContent from '../../../components/logsheet/row-container-cont
 
 export default class Index extends Component {
   static navigationOptions = {
-    title: 'Daftar Petugas',
   };
 
   constructor(props) {
@@ -26,6 +25,7 @@ export default class Index extends Component {
       shift: '',
       whs_number: '',
       location: '',
+      total_qty_solar: '',
       detail: [],
       refreshing: false
     }
@@ -36,7 +36,6 @@ export default class Index extends Component {
 
     this.props.navigation.addListener('willFocus', 
       () => {
-        // this.handleRefresh()
         this.findByCreatorWithDetail(pitstopSaranaId);
       }
     )
@@ -98,7 +97,7 @@ export default class Index extends Component {
             </RowHeader>
 
             <RowHeader> 
-              <RowHeaderContent title="Total QTY Solar" content="2500000" />
+              <RowHeaderContent title="Total QTY Solar" content={this.state.total_qty_solar} />
             </RowHeader>
           </Card>
 
@@ -134,6 +133,7 @@ export default class Index extends Component {
           shift: res.shift_view,
           whs_number: res.whs_number,
           location: res.location,
+          total_qty_solar: String(res.total_qty_solar),
           detail: res.detail,
           refreshing: false
         })

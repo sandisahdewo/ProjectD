@@ -23,11 +23,13 @@ export default class Index extends Component {
 		},
 		{
 			title: 'Pitstop Sarana 1',
-			action: 'ApprovalMaintankInletIndex'
+      action: 'ApprovalPitstopSaranaIndex',
+      params: { pitstopSaranaNomor:1 }
 		},
 		{
 			title: 'Pitstop Sarana 2',
-			action: 'ApprovalMaintankInletIndex'
+      action: 'ApprovalPitstopSaranaIndex',
+      params: { pitstopSaranaNomor:2 }
 		},
 		{
 			title: 'Pitstop 1',
@@ -70,7 +72,7 @@ export default class Index extends Component {
 			title={item.title}
 			titleStyle={{color:'#808080'}}
 			containerStyle={{borderBottomColor:'black', borderBottomWidth:0.5, marginHorizontal:4}}
-			onPress={(item) => this.props.navigation.navigate('ApprovalMaintankInletIndex')}
+			onPress={() => this.props.navigation.navigate(`${item.action}`, item.params)}
 			rightIcon={
 				<Icon name="angle-right" type='FontAwesome5' size={20} style={{ color:'#808080' }}/>
 			}

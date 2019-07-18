@@ -25,7 +25,14 @@ export default class Index extends Component {
       isFetching: false
     }
 
-    this.getAllService();
+  }
+
+  componentDidMount = () => {
+    this.props.navigation.addListener('willFocus', 
+      () => {
+        this.getAllService();
+      }
+    )
   }
 
   keyExtractor = (item, index) => index.toString();
@@ -118,7 +125,8 @@ export default class Index extends Component {
 
   getAllService = async () => {
     const params = {
-      line : this.props.navigation.state.params.line
+      line : this.props.navigation.state.params.line,
+      nomor : this.props.navigation.state.params.pitstopSaranaNomor
     }
     await ServicePitstopSarana.getAllService(params)
           .then(res => {

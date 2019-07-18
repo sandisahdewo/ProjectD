@@ -1,1 +1,0 @@
-export const RootPath = 'http://192.168.1.133/projectD/public/api'

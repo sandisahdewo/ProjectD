@@ -78,7 +78,7 @@ export default class Create extends Component {
 
                   <InputFloatingLabelWithValidation title='Driver' value={this.state.driver} onChangeText={(driver) => this.setState({driver})} error={this.state.validation.driver} />
                   <InputFloatingLabelWithValidation title='Fuelman' value={this.state.fuelman} onChangeText={(fuelman) => this.setState({fuelman})} error={this.state.validation.fuelman} />
-                  <DateFloatingLabelWithValidation title='Tanggal' onSelected={(tanggal) => this.setState({tanggal})} error={this.state.validation.tanggal} />
+                  <DateFloatingLabelWithValidation value={this.state.tanggal} title='Tanggal' onSelected={(tanggal) => this.setState({tanggal})} error={this.state.validation.tanggal} />
 
                   <View style={{marginBottom:7}}>
                     <Item>
@@ -136,7 +136,7 @@ export default class Create extends Component {
           line: res.line,
           driver: res.driver,
           fuelman: res.fuelman,
-          tanggal: res.tanggal,
+          tanggal: res.tanggal_view,
           shift: res.shift,
           whs_number: res.whs_number,
           location: res.location,
@@ -167,6 +167,7 @@ export default class Create extends Component {
             buttonText: 'Okay',
             type:'success'
           })
+          this.props.navigation.navigate('ServicePitstopSaranaIndex')
         }
       })
       .catch(err => {
