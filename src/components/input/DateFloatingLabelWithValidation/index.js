@@ -12,17 +12,6 @@ class DateFloatingLabelWithValidation extends Component {
     }
   }
 
-  // componentDidMount() {
-  //   this.props.setDefaultValue ? this.setState({value : format(new Date(), 'DD-MM-YYYY') }) : this.setState({value : '2019-05-04' });
-  //   console.log('value props', this.props.value)
-  // }
-
-  // componentDidUpdate(prevProps, nextProps) {
-  //   console.log('prev', prevProps)
-  //   console.log('next', nextProps)
-  //   // this.props.setDefaultValue ? this.setState({value : format(new Date(), 'DD-MM-YYYY') }) : this.setState({value : this.props.value });
-  // }
-
   render () {
     const hasError = React.Children.count(this.props.error) > 0 && this.props.error ? true : false;
     

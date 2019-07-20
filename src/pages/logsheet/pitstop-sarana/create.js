@@ -52,6 +52,7 @@ export default class Create extends Component {
       tanggal: format(new Date(), 'DD-MM-YYYY'),
       jam: format(new Date(), 'HH:mm:ss'),
     })
+    this.findLastLogsheet()
   }
 
   keyExtractorModal = (item, index) => index.toString()
@@ -108,7 +109,7 @@ export default class Create extends Component {
                 </View>
                 <View style={{borderBottomWidth:1, borderBottomColor:'#ccc'}}></View>
                 <View style={{marginTop:10, marginHorizontal:6}}>
-                  <InputFloatingLabelWithValidation title='Kode Unit' onTouchStart={ () => this.toggleModal() } value={this.state.kode_unit} error={this.state.validation.kode_unit} />
+                  <InputFloatingLabelWithValidation title='Kode Unit' onTouchStart={ () => this.toggleModalFindUnit() } value={this.state.kode_unit} error={this.state.validation.kode_unit} />
                   <InputFloatingLabelWithValidation title='Model Unit' value={this.state.tipe_unit} error={this.state.validation.driver} disabled />
                   <InputFloatingLabelWithValidation title='No Polisi' value={this.state.no_polisi} error={this.state.validation.no_polisi} disabled />
                   <InputFloatingLabelWithValidation title='HM/KM' onChangeText={(hm_km) => this.setState({hm_km}) } value={this.state.hm_km} keyboardType='number-pad' error={this.state.validation.hm_km} />
@@ -155,7 +156,7 @@ export default class Create extends Component {
                 </View>
                 <View style={{borderBottomWidth:1, borderBottomColor:'#ccc'}}></View>
                 <View style={{marginTop:10, marginHorizontal:6}}>
-                  <InputFloatingLabelWithValidation title='Flow Meter Awal' onChangeText={(flow_meter_awal) => this.setFlowMeterAwal(flow_meter_awal) } error={this.state.validation.flow_meter_awal} keyboardType='number-pad'/>
+                  <InputFloatingLabelWithValidation title='Flow Meter Awal' value={this.state.flow_meter_awal} onChangeText={(flow_meter_awal) => this.setFlowMeterAwal(flow_meter_awal) } error={this.state.validation.flow_meter_awal} keyboardType='number-pad'/>
                   <InputFloatingLabelWithValidation title='Flow Meter Akhir' onChangeText={(flow_meter_akhir) => this.setFlowMeterAkhir(flow_meter_akhir) } error={this.state.validation.flow_meter_akhir} keyboardType='number-pad'/>
                   <InputFloatingLabelWithValidation title='Selisih Flow Meter' value={this.state.selisih_flow_meter} error={this.state.validation.flow_meter_akhir} disabled/>
                 </View>
@@ -169,11 +170,11 @@ export default class Create extends Component {
             <Modal isVisible={this.state.showModal} 
               style={styles.bottomModal}
               swipeDirection={['right', 'down']}
-              onSwipeComplete={() => this.toggleModal()}
+              onSwipeComplete={() => this.toggleModalFindUnit()}
             >
               <View style={{flex:1, paddingHorizontal:8, paddingBottom:8, backgroundColor:'white'}}>
                 <View style={{flexDirection:'row', padding:10}}>
-                  <TouchableWithoutFeedback onPress={() => this.toggleModal() }>
+                  <TouchableWithoutFeedback onPress={() => this.toggleModalFindUnit() }>
                     <Icon name='ios-close' style={{fontSize:35, color: '#808080'}} />
                   </TouchableWithoutFeedback>
                   <Text style={{fontSize:18, marginLeft:10, marginTop:5}}>Cari & Pilih Unit</Text>
@@ -205,7 +206,17 @@ export default class Create extends Component {
     );
   }
 
-  toggleModal = () => {
+  findLastLogsheet = () => {
+    ServicePitstopSarana.findLastLogsheet()
+      .then(res => {
+        this.setState({
+          flow_meter_awal: String(res.flow_meter_akhir)
+        })
+      })
+      .catch(err => {})
+  }
+
+  toggleModalFindUnit = () => {
     this.setState({ 
       listUnit: [],
       showModal: !this.state.showModal 
@@ -245,7 +256,7 @@ export default class Create extends Component {
       no_polisi: item.no_polisi,
       jatah_solar: item.jatah_solar
     }, () => {
-      this.toggleModal();
+      this.toggleModalFindUnit();
     })
   }
 

@@ -1,20 +1,29 @@
 import React, {Component} from 'react';
-import { View, StyleSheet, TouchableWithoutFeedback, FlatList, Alert } from 'react-native';
-import { Card, Icon, Text } from 'native-base';
-import ActionButton from 'react-native-action-button';
+import { format } from 'date-fns'
+import Modal from "react-native-modal";
 import Row from '../../../components/row';
-import BtnSm from '../../../components/button/small';
 import Vline from '../../../components/line';
+import { Button } from 'react-native-elements';
+import BtnSm from '../../../components/button/small';
+import ActionButton from 'react-native-action-button';
 import ServicePitstopSarana from '../../../services/pitstop-sarana';
+import { Card, Icon, Text, Item, Input, Label, Picker } from 'native-base';
+import DateFloatingLabelWithValidation from '../../../components/input/DateFloatingLabelWithValidation';
+import { View, StyleSheet, TouchableWithoutFeedback, TouchableHighlight, FlatList, Alert } from 'react-native';
+
+let self = null;
 
 export default class Index extends Component {
-  static navigationOptions = {
-    headerStyle: {
-      backgroundColor: '#eeeeee',
-      elevation: 0
-    },
-    headerTintColor: '#808080',
-    title:'E-Izin',
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerRight: (
+        <TouchableHighlight onPress={() => self.toggleModal() }>
+          <View style={{marginRight: 15}}>
+            <Icon name="funnel" size={28} style={{ color:'white' }}/>
+          </View>
+        </TouchableHighlight>
+      ),
+    }
   };
 
   constructor(props) {
@@ -22,12 +31,25 @@ export default class Index extends Component {
 
     this.state = {
       list: [],
-      isFetching: false
+      dataFound: true,
+      isFetching: false,
+      toggleModal: false,
+
+      // filter
+      filter_tanggal: '',
+      filter_shift: '',
+      filter_status: 'input'
     }
 
   }
 
   componentDidMount = () => {
+    self = this;
+    
+    this.setState({
+      filter_tanggal: format(new Date(), 'DD-MM-YYYY')
+    })
+
     this.props.navigation.addListener('willFocus', 
       () => {
         this.getAllService();
@@ -111,29 +133,119 @@ export default class Index extends Component {
   render() {
     return (
       <View style={{flex:1}}>
-        <FlatList
-          keyExtractor={this.keyExtractor}
-          data={this.state.list}
-          renderItem={this.renderItem}
-          onRefresh={() => this.refreshList() }
-          refreshing={this.state.isFetching}
-        />
+        {!this.state.dataFound && 
+          <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+            <Text>Tidak ada data untuk ditampilkan</Text>
+          </View>
+        }
+
+        {this.state.dataFound &&
+          <View style={{flex:1}}>
+            <FlatList
+              keyExtractor={this.keyExtractor}
+              data={this.state.list}
+              renderItem={this.renderItem}
+              onRefresh={() => this.refreshList() }
+              refreshing={this.state.isFetching}
+            />
+          </View>
+        }
+
+        {/* Modal untuk filter di bawah */}
+        <View>
+          <Modal isVisible={this.state.toggleModal} 
+            swipeDirection={['right', 'down']}
+            style={{justifyContent: 'flex-end', margin: 0}}
+            onSwipeComplete={() => this.toggleModal()}
+          >
+          <View style={{paddingHorizontal:8, paddingBottom:8, backgroundColor:'white', borderTopLeftRadius:10, borderTopRightRadius:10 }}>
+            <View style={{marginBottom:7}}>
+              <View style={{height:40, marginBottom:7}}>
+                <Row style={{borderBottomColor:'#808080', justifyContent:'flex-start', alignItems:'center', borderBottomWidth:0.4}}>
+                  <TouchableWithoutFeedback onPress={() => this.toggleModal()}>
+                    <Icon name='close' style={{fontSize:20, marginRight:10, color:'black'}} />
+                  </TouchableWithoutFeedback>
+                  <Text style={{fontSize:18}}>Filter Data</Text>
+                </Row>
+              </View>
+              <DateFloatingLabelWithValidation value={this.state.filter_tanggal} title='Tanggal' onSelected={(filter_tanggal) => this.setState({filter_tanggal})}/>
+              </View>
+              <View style={{marginBottom:7}}>
+                <Item>
+                  <View style={{flex:1, flexDirection:'column'}}>
+                    <Label style={{fontSize:12}}>Shift</Label>
+                    <Picker
+                      mode="dropdown"
+                      iosIcon={<Icon name="arrow-down" />}
+                      placeholder="Pilih Shift"
+                      placeholderStyle={{ color: "#bfc6ea" }}
+                      placeholderIconColor="#007aff"
+                      style={{ width: undefined }}
+                      selectedValue={this.state.filter_shift}
+                      onValueChange={(filter_shift) => this.setState({filter_shift})}
+                    >
+                      <Picker.Item label="Siang (07:00 - 17:00)" value="siang" />
+                      <Picker.Item label="Malam (17:00 - 07:00)" value="malam" />
+                    </Picker>
+                  </View>
+                </Item>
+              </View>
+              <View style={{marginBottom:7}}>
+                <Item>
+                  <View style={{flex:1, flexDirection:'column'}}>
+                    <Label style={{fontSize:12}}>Status</Label>
+                    <Picker
+                      mode="dropdown"
+                      iosIcon={<Icon name="arrow-down" />}
+                      placeholder="Pilih Status"
+                      placeholderStyle={{ color: "#bfc6ea" }}
+                      placeholderIconColor="#007aff"
+                      style={{ width: undefined }}
+                      selectedValue={this.state.filter_status}
+                      onValueChange={(filter_status) => this.setState({filter_status})}
+                    >
+                      <Picker.Item label="Input" value="input" />
+                      <Picker.Item label="Approved" value="approved" />
+                      <Picker.Item label="Rejected" value="rejected" />
+                    </Picker>
+                  </View>
+                </Item>
+              </View>
+              <Button title="Terapkan" onPress={() => { this.toggleModal(); this.getAllService() }} />
+            </View>
+          </Modal>
+        </View>
         <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaCreate')}/>
       </View>
     );
   }
 
   getAllService = async () => {
+    this.setState({
+      dataFound:true,
+      list:[],
+    })
     const params = {
       line : this.props.navigation.state.params.line,
-      nomor : this.props.navigation.state.params.pitstopSaranaNomor
+      nomor : this.props.navigation.state.params.pitstopSaranaNomor,
+      tanggal: this.state.filter_tanggal,
+      shift: this.state.filter_shift,
+      status: this.state.filter_status
     }
     await ServicePitstopSarana.getAllService(params)
           .then(res => {
-            this.setState({
-              list: res,
-              isFetching: false
-            })
+            if(res.length > 0) {
+              this.setState({
+                list: res,
+                isFetching: false,
+                dataFound: true
+              })
+            } else {
+              this.setState({
+                dataFound:false,
+                list: [],
+              })
+            }
           })
           .catch(err => {
             console.log('er', err)
@@ -171,6 +283,10 @@ export default class Index extends Component {
       .catch(err => {
         console.log('err', err)
       })
+  }
+
+  toggleModal = () => {
+    this.setState({ toggleModal: !this.state.toggleModal })
   }
 
 }

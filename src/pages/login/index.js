@@ -12,6 +12,7 @@ export default class Index extends Component {
     this.state = {
       username: '',
       password: '',
+      loginLoading: false,
 
       validation: {
         username: '',
@@ -42,10 +43,14 @@ export default class Index extends Component {
             </Item>
             <Text style={{fontSize:12, color:'red'}}>{this.state.validation.password}</Text>
             <View style={{marginTop:10}}>
-              <Button block info style={{backgroundColor:"#2089dc", height:40, paddingHorizontal:20}}
+              <Button disabled={this.state.loginLoading} block info style={{backgroundColor:"#2089dc", height:40, paddingHorizontal:20}}
                onPress={() => this.attempt()}
               >
-                <Text style={{color:'white', fontSize:16, fontWeight:'bold'}}> Login </Text>
+                { this.state.loginLoading ?
+                  <Text style={{color:'white', fontSize:16, fontWeight:'bold'}}> Loading... </Text>
+                  :
+                  <Text style={{color:'white', fontSize:16, fontWeight:'bold'}}> Login </Text>
+                }
               </Button>
             </View>
           </KeyboardAvoidingView>
@@ -63,7 +68,8 @@ export default class Index extends Component {
 
   attempt = async () => {
     this.setState({
-      validation: {}
+      validation: {},
+      loginLoading: true
     })
     const formData = {
       username: this.state.username,
@@ -85,7 +91,8 @@ export default class Index extends Component {
             validation: {
               username: validation.username,
               password: validation.password,
-            }
+            },
+            loginLoading: false
           })
         } else {
           Toast.show({

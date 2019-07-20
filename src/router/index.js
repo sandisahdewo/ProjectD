@@ -28,6 +28,10 @@ import PetugasIndex from "../pages/petugas/index";
 import PetugasCreate from "../pages/petugas/create";
 import PetugasEdit from "../pages/petugas/edit";
 
+import UnitIndex from "../pages/unit/index";
+import UnitCreate from "../pages/unit/create";
+import UnitEdit from "../pages/unit/edit";
+
 import Sidebar from "../components/sidebar/sidebar"
 import { createSwitchNavigator, createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation';
 
@@ -256,6 +260,37 @@ const PageStack = createStackNavigator({
       }
     }) 
   },
+
+  UnitIndex: { 
+    screen: UnitIndex,
+    navigationOptions: () => ({
+      title: 'Data Unit',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  UnitCreate: { 
+    screen: UnitCreate,
+    navigationOptions: () => ({
+      title: 'Tambah Unit',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
+  UnitEdit: { 
+    screen: UnitEdit,
+    navigationOptions: () => ({
+      title: 'Perbarui Unit',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    }) 
+  },
 });
 
 const DrawerNavigator = createDrawerNavigator({
@@ -270,7 +305,7 @@ const SwitchNavigator = createSwitchNavigator({
   Login: LoginStack
 },
 {
-  initialRouteName: 'Login',
+  initialRouteName: 'App',
 });
 
 const Nav = createAppContainer(SwitchNavigator)
