@@ -23,9 +23,7 @@ import Identity from '../config/identity'
 const GetBlobWithToken = async(path, config) => {
   let token = await Identity.getAccessToken();
   let headers = {
-    headers: {
-      'Authorization' : `Bearer ${token}`
-    }
+    'Authorization' : `Bearer ${token}`
   }
   const promise = new Promise((resolve, reject) => {
     RNFetchBlob.config(config)

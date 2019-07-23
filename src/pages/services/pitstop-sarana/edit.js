@@ -26,7 +26,8 @@ export default class Create extends Component {
 
     this.state = {
       id: '',
-      line: 'line 1',
+      line: '',
+      nomor: '',
       driver: '',
       fuelman: '',
       tanggal: '',
@@ -61,7 +62,7 @@ export default class Create extends Component {
                 <View style={{borderBottomWidth:1, borderBottomColor:'#ccc'}}></View>
 								<View style={{paddingVertical:5, paddingHorizontal:7}}>
 									<Text style={{fontSize:18, fontWeight:'bold'}}>Pitstop Sarana</Text>
-									<Text style={{fontSize:16, fontWeight:'bold'}}>Line 1</Text>
+									<Text style={{fontSize:16, fontWeight:'bold'}}>{this.state.line}</Text>
 								</View>
 							</View>
 						</Card>

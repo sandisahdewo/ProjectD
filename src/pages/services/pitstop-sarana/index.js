@@ -215,7 +215,7 @@ export default class Index extends Component {
             </View>
           </Modal>
         </View>
-        <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaCreate')}/>
+        <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaCreate', {line: this.props.navigation.state.params.line, pitstopSaranaNomor: this.props.navigation.state.params.pitstopSaranaNomor})}/>
       </View>
     );
   }

@@ -5,6 +5,7 @@ import { Button } from 'react-native-elements';
 import ServicePitstopSarana from '../../../services/pitstop-sarana';
 import InputFloatingLabelWithValidation from '../../../components/input/FloatingLabelWithValidation'
 import DateFloatingLabelWithValidation from '../../../components/input/DateFloatingLabelWithValidation'
+import {format} from 'date-fns';
 
 export default class Create extends Component {
 
@@ -24,7 +25,8 @@ export default class Create extends Component {
     super(props);
 
     this.state = {
-      line: 'line 1',
+      nomor: '',
+      line: '',
       driver: '',
       fuelman: '',
       tanggal: '',
@@ -37,6 +39,14 @@ export default class Create extends Component {
         fuelman: '',
       }
     }
+  }
+
+  componentDidMount = () => {
+    this.setState({
+      tanggal: format(new Date(), 'DD-MM-YYYY'),
+      nomor: this.props.navigation.state.params.pitstopSaranaNomor,
+      line: this.props.navigation.state.params.line
+    })
   }
 
   render() {
@@ -54,7 +64,7 @@ export default class Create extends Component {
                 <View style={{borderBottomWidth:1, borderBottomColor:'#ccc'}}></View>
 								<View style={{paddingVertical:5, paddingHorizontal:7}}>
 									<Text style={{fontSize:18, fontWeight:'bold'}}>Pitstop Sarana</Text>
-									<Text style={{fontSize:16, fontWeight:'bold'}}>Line 1</Text>
+									<Text style={{fontSize:16, fontWeight:'bold'}}>{this.state.line}</Text>
 								</View>
 							</View>
 						</Card>
@@ -71,7 +81,7 @@ export default class Create extends Component {
 
                   <InputFloatingLabelWithValidation title='Driver' onChangeText={(driver) => this.setState({driver})} error={this.state.validation.driver} />
                   <InputFloatingLabelWithValidation title='Fuelman' onChangeText={(fuelman) => this.setState({fuelman})} error={this.state.validation.fuelman} />
-                  <DateFloatingLabelWithValidation title='Tanggal' setDefaultValue onSelected={(tanggal) => this.setState({tanggal})} error={this.state.validation.tanggal} />
+                  <DateFloatingLabelWithValidation title='Tanggal' value={this.state.tanggal} onSelected={(tanggal) => this.setState({tanggal})} error={this.state.validation.tanggal} />
 
                   <View style={{marginBottom:7}}>
                     <Item>
@@ -127,6 +137,7 @@ export default class Create extends Component {
     })
     
     const formData = {
+      nomor: this.state.nomor,
       line: this.state.line,
       driver: this.state.driver,
       fuelman: this.state.fuelman,
