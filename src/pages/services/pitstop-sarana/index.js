@@ -73,30 +73,30 @@ export default class Index extends Component {
           <View style={{flex:1, flexDirection:'row', justifyContent:'space-between'}}>
             <View style={{flex:1, flexDirection:'column', paddingRight:15}}>
               <View>
-                <Text style={{fontSize:14, fontWeight:'bold'}}>Driver</Text>
-                <Text style={{fontSize:12}}>{item.driver}</Text>
+                <Text style={{fontSize:14, fontWeight:'bold'}}>Fuelman</Text>
+                <Text style={{fontSize:12}}>{item.fuelman}</Text>
               </View>
               <View style={{marginTop:10}}>
                 <Text style={{fontSize:14, fontWeight:'bold'}}>Tanggal</Text>
                 <Text style={{fontSize:12}}>{item.tanggal_view}</Text>
               </View>
               <View style={{marginTop:10}}>
-                <Text style={{fontSize:14, fontWeight:'bold'}}>WHS Number</Text>
-                <Text style={{fontSize:12}}>{item.whs_number}</Text>
+                <Text style={{fontSize:14, fontWeight:'bold'}}>Shift</Text>
+                <Text style={{fontSize:12}}>{item.shift_view}</Text>
               </View>
             </View>
             <View style={{flex:1, flexDirection:'column'}}>
               <View>
-                <Text style={{fontSize:14, fontWeight:'bold'}}>Fuelman</Text>
-                <Text style={{fontSize:12}}>{item.fuelman}</Text>
-              </View>
-              <View style={{marginTop:10}}>
-                <Text style={{fontSize:14, fontWeight:'bold'}}>Shift</Text>
-                <Text style={{fontSize:12}}>{item.shift_view}</Text>
+                <Text style={{fontSize:14, fontWeight:'bold'}}>WHS Number</Text>
+                <Text style={{fontSize:12}}>{item.whs_number}</Text>
               </View>
               <View style={{marginTop:10}}>
                 <Text style={{fontSize:14, fontWeight:'bold'}}>Location</Text>
                 <Text style={{fontSize:12}}>{item.location}</Text>
+              </View>
+              <View style={{marginTop:10}}>
+                <Text style={{fontSize:14, fontWeight:'bold'}}></Text>
+                <Text style={{fontSize:12}}></Text>
               </View>
             </View>
           </View>
@@ -117,7 +117,13 @@ export default class Index extends Component {
               <Icon name='create' style={{fontSize:19, marginRight:10, color:'blue'}} />
                 <Text style={{fontSize:14, color:'blue'}}>Input</Text>
             </Row>
-          }
+            }
+            { (item.status == 'finish-input') &&
+            <Row style={{justifyContent:'flex-start'}}>
+              <Icon name='checkmark' style={{fontSize:19, marginRight:10, color:'blue'}} />
+                <Text style={{fontSize:14, color:'blue'}}>Finish Input</Text>
+            </Row>
+            }
           {(item.status == 'input' || item.status == 'rejected') && 
             <Row style={{justifyContent:'flex-end'}}>
               <BtnSm buttonStyle={{marginRight:4, backgroundColor:'#FFBF00'}} onPress={() => this.props.navigation.navigate('ServicePitstopSaranaEdit', {id: item.id})} title="Edit"></BtnSm>
@@ -205,6 +211,7 @@ export default class Index extends Component {
                       onValueChange={(filter_status) => this.setState({filter_status})}
                     >
                       <Picker.Item label="Input" value="input" />
+                      <Picker.Item label="Finish Input" value="finish-input" />
                       <Picker.Item label="Approved" value="approved" />
                       <Picker.Item label="Rejected" value="rejected" />
                     </Picker>

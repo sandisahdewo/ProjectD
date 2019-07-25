@@ -27,16 +27,16 @@ export default class Create extends Component {
     this.state = {
       nomor: '',
       line: '',
-      driver: '',
-      fuelman: '',
+      // driver: '',
+      // fuelman: '',
       tanggal: '',
       shift: 'siang',
       whs_number: '',
       location:'',
 
       validation: {
-        driver: '',
-        fuelman: '',
+        whs_number: '',
+        location: '',
       }
     }
   }
@@ -79,8 +79,8 @@ export default class Create extends Component {
                 <View style={{borderBottomWidth:1, borderBottomColor:'#ccc'}}></View>
                 <View style={{marginTop:10, marginHorizontal:6}}>
 
-                  <InputFloatingLabelWithValidation title='Driver' onChangeText={(driver) => this.setState({driver})} error={this.state.validation.driver} />
-                  <InputFloatingLabelWithValidation title='Fuelman' onChangeText={(fuelman) => this.setState({fuelman})} error={this.state.validation.fuelman} />
+                  {/* <InputFloatingLabelWithValidation title='Driver' onChangeText={(driver) => this.setState({driver})} error={this.state.validation.driver} /> */}
+                  {/* <InputFloatingLabelWithValidation title='Fuelman' onChangeText={(fuelman) => this.setState({fuelman})} error={this.state.validation.fuelman} /> */}
                   <DateFloatingLabelWithValidation title='Tanggal' value={this.state.tanggal} onSelected={(tanggal) => this.setState({tanggal})} error={this.state.validation.tanggal} />
 
                   <View style={{marginBottom:7}}>
@@ -139,8 +139,8 @@ export default class Create extends Component {
     const formData = {
       nomor: this.state.nomor,
       line: this.state.line,
-      driver: this.state.driver,
-      fuelman: this.state.fuelman,
+      // driver: this.state.driver,
+      // fuelman: this.state.fuelman,
       tanggal: this.state.tanggal,
       shift: this.state.shift,
       whs_number: this.state.whs_number,
@@ -162,8 +162,8 @@ export default class Create extends Component {
         const validationMessage = err.response.data.errors;
         this.setState({
           validation: {
-            driver: validationMessage.driver,
-            fuelman: validationMessage.fuelman
+            whs_number: validationMessage.whs_number,
+            location: validationMessage.lokasi
           }
         })
         Toast.show({

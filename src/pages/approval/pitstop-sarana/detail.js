@@ -91,15 +91,15 @@ export default class Detail extends Component {
   );
 
   render() {
-    const showRejectButton = this.state.status == 'input' ? true : false;
-    const showApproveButton = this.state.status == 'input' || this.state.status == 'rejected' ? true : false;
+    const showRejectButton = this.state.status == 'finish-input' ? true : false;
+    const showApproveButton = this.state.status == 'finish-input' || this.state.status == 'rejected' ? true : false;
     const showDownloadButton = this.state.status == 'approved' ? true : false;
 
     return (
       <Container>
         <Content>
           <Card>
-          < RowHeader> 
+            <RowHeader> 
               <RowHeaderContent title="Driver" content={this.state.driver} />
               <RowHeaderContent title="Fuelman" content={this.state.fuelman} />
             </RowHeader>
@@ -147,6 +147,10 @@ export default class Detail extends Component {
               <Button iconLeft full success onPress={() => this.downloadExcel(this.state.id) }>
                 <Icon name='file-excel-o' type='FontAwesome' />
                 <Text style={{color:'white', fontSize:16, marginLeft:5}}>Download Excel</Text>
+              </Button>
+              <Button iconLeft full success onPress={() => this.downloadPDF(this.state.id) } style={{marginTop:10, backgroundColor:'#1E90FF'}}>
+                <Icon name='file-pdf-o' type='FontAwesome' />
+                <Text style={{color:'white', fontSize:16, marginLeft:5}}>Download PDF</Text>
               </Button>
             </View>
           }
@@ -240,6 +244,25 @@ export default class Detail extends Component {
       .then(res => {
         Toast.show({
           text: 'Berhasil export laporan pitstop sarana!',
+          buttonText: 'Okay',
+          type:'success'
+        })
+      })
+      .catch(err => {
+        Toast.show({
+          text: err.message,
+          buttonText: 'Okay',
+          type:'danger'
+        })
+      })
+  }
+
+  downloadPDF = (id) => {
+    const title = `pitstop-sarana ${this.state.fuelman} ${this.state.tanggal} ${this.state.shift}.pdf`;
+    ServicePitstopSarana.exportPDF(id, title)
+      .then(res => {
+        Toast.show({
+          text: 'Berhasil export PDF pitstop sarana!',
           buttonText: 'Okay',
           type:'success'
         })

@@ -5,7 +5,7 @@ import Modal from "react-native-modal";
 import { Button } from 'react-native-elements';
 import ServiceUnit from '../../../services/unit';
 import ServicePitstopSarana from '../../../services/pitstop-sarana';
-import { Container, Content, Card, Item, Label, Icon, Input, Toast } from 'native-base';
+import { Container, Content, Card, Item, Label, Icon, Input, Toast, Textarea } from 'native-base';
 import InputFloatingLabelWithValidation from '../../../components/input/FloatingLabelWithValidation'
 import { View, Text, KeyboardAvoidingView, StyleSheet, FlatList, TouchableWithoutFeedback } from 'react-native';
 
@@ -28,6 +28,7 @@ export default class Create extends Component {
       flow_meter_awal: '',
       flow_meter_akhir: '',
       selisih_flow_meter: '',
+      keterangan: '',
 
       unitNotFound: false,
       listUnit: [],
@@ -160,6 +161,20 @@ export default class Create extends Component {
               </View>
             </Card>
 
+            <Card style={{marginLeft:5, marginRight:5}}>
+              <View style={{flex:1}}>
+								<View style={{margin:5}}>
+                  <Text>
+										KETERANGAN
+                  </Text>
+                </View>
+                <View style={{borderBottomWidth:1, borderBottomColor:'#ccc'}}></View>
+                <View style={{marginTop:10, marginHorizontal:6}}>
+                  <Textarea value={this.state.keterangan} onChangeText={(keterangan) => this.setState({keterangan})} rowSpan={3} />
+                </View>
+              </View>
+            </Card>
+
             <View style={{flex:1, height:100, marginHorizontal:5}}>
               <Button title='Perbarui' onPress={() => this.update(this.state.id)}></Button>
             </View>
@@ -221,6 +236,7 @@ export default class Create extends Component {
           flow_meter_awal: String(res.flow_meter_awal),
           flow_meter_akhir: String(res.flow_meter_akhir),
           selisih_flow_meter: String(res.qty_flow_meter),
+          keterangan: res.keterangan
         })
       })
       .catch(err => {
@@ -313,6 +329,7 @@ export default class Create extends Component {
       flow_meter_awal: this.state.flow_meter_awal,
       flow_meter_akhir: this.state.flow_meter_akhir,
       selisih_flow_meter: this.state.selisih_flow_meter,
+      keterangan: this.state.keterangan,
     }
 
     ServicePitstopSarana.updateLogsheet(formData, id)

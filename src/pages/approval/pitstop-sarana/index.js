@@ -82,16 +82,16 @@ export default class Index extends Component {
           <Vline/>
           <Row>
             <Column style={{paddingRight:15}}>
-              <RowContainerContent title="Driver" content={item.driver}/>
+              {/* <RowContainerContent title="Driver" content={item.driver}/> */}
+              <RowContainerContent title="Fuelman" content={item.fuelman}/>
               <RowContainerContent title="Tanggal" content={item.tanggal}/>
-              <RowContainerContent title="WHS Number" content={item.whs_number}/>
-              <RowContainerContent title="Total QTY Solar" content={item.total_qty_solar}/>
+              <RowContainerContent title="Shift" content={item.shift}/>
             </Column>
             <Column>
-              <RowContainerContent title="Fuelman" content={item.fuelman}/>
-              <RowContainerContent title="Shift" content={item.shift}/>
+              <RowContainerContent title="WHS Number" content={item.whs_number}/>
               <RowContainerContent title="Location" content={item.location}/>
-              <RowContainerContent title="" content=""/>
+              <RowContainerContent title="Total QTY Solar" content={item.total_qty_solar}/>
+              {/* <RowContainerContent title="" content=""/> */}
             </Column>
           </Row>
           <Vline/>
@@ -111,7 +111,13 @@ export default class Index extends Component {
               <Icon name='create' style={{fontSize:19, marginRight:10, color:'blue'}} />
                 <Text style={{fontSize:14, color:'blue'}}>Input</Text>
             </Row>
-          }
+            }
+            { (item.status == 'finish-input') &&
+            <Row style={{justifyContent:'flex-start'}}>
+              <Icon name='checkmark' style={{fontSize:19, marginRight:10, color:'blue'}} />
+                <Text style={{fontSize:14, color:'blue'}}>Finish Input</Text>
+            </Row>
+            }
           </Row>
         </View>
       </TouchableWithoutFeedback>
@@ -134,7 +140,7 @@ export default class Index extends Component {
             style={styles.bottomModal}
             onSwipeComplete={() => this.toggleModal()}
           >
-          <View style={{paddingHorizontal:8, paddingBottom:8, backgroundColor:'white'}}>
+          <View style={{paddingHorizontal:8, paddingBottom:8, backgroundColor:'white', borderRadius:8}}>
             <View style={{marginBottom:7}}>
               <View style={{height:40, marginBottom:7}}>
                 <Row style={{borderBottomColor:'#808080', justifyContent:'flex-start', alignItems:'center', borderBottomWidth:0.4}}>
@@ -181,6 +187,8 @@ export default class Index extends Component {
                       style={{ width: undefined }}
                       selectedValue={this.state.selectedJenisPetugas}
                     >
+                      <Picker.Item label="Input" value="input" />
+                      <Picker.Item label="Finish Input" value="finish-input" />
                       <Picker.Item label="Approved" value="approved" />
                       <Picker.Item label="Rejected" value="rejected" />
                     </Picker>

@@ -4,34 +4,45 @@ import Vline from '../../../components/line';
 import Column from '../../../components/column';
 import BtnSm from '../../../components/button/small';
 import ActionButton from 'react-native-action-button';
-import { Container, Content, Card, Toast } from 'native-base';
+import { Container, Content, Card, Toast, Icon } from 'native-base';
 import RowHeader from '../../../components/logsheet/row-header';
-import { View, StyleSheet, FlatList, Alert } from 'react-native';
+import { View, StyleSheet, FlatList, Alert, TouchableWithoutFeedback } from 'react-native';
 import ServicePitstopSarana from '../../../services/pitstop-sarana';
 import RowHeaderContent from '../../../components/logsheet/row-header-content';
 import RowContainerContent from '../../../components/logsheet/row-container-content';
 
+let _this;
+
 export default class Index extends Component {
   static navigationOptions = {
+    headerLeft: (
+      <TouchableWithoutFeedback onPress={() => _this.props.navigation.navigate('ServicePitstopSaranaIndex', {pitstopSaranaId: _this.props.navigation.state.params.pitstopSaranaId } )} >
+        <Icon name='arrow-back' style={{color:'white', paddingLeft:20, fontSize:24}} />
+      </TouchableWithoutFeedback>
+    )
   };
 
   constructor(props) {
     super(props)
 
     this.state = {
+      id: '',
       driver: '',
       fuelman: '',
       tanggal: '',
       shift: '',
       whs_number: '',
       location: '',
+      status: '',
       total_qty_solar: '',
+      total_selisih_flow_meter: '',
       detail: [],
       refreshing: false
     }
   }
 
   componentDidMount = () => {
+    _this = this;
     const pitstopSaranaId = this.props.navigation.state.params.pitstopSaranaId;
 
     this.props.navigation.addListener('willFocus', 
@@ -45,7 +56,7 @@ export default class Index extends Component {
 
   renderItem = ({item}) => (
     <Card>
-      <Row style={{padding:7}}>
+      <Row style={{paddingTop:7, paddingLeft:7, paddingRight:7}}>
         <Column>
           <RowContainerContent title="Kode Unit" content={item.kode_unit} />
           <RowContainerContent title="Model Unit" content={item.model_unit} />
@@ -62,42 +73,60 @@ export default class Index extends Component {
           <RowContainerContent title="Selisih Flow Meter" content={item.qty_flow_meter} />
         </Column>
       </Row>
+      <Row style={{paddingLeft:7}}>
+        <Column>
+          <RowContainerContent title="Keterangan" content={item.keterangan} />
+        </Column>
+      </Row>
       <Vline/>
       <Row style={{padding:7}}>
-        <View style={{flex:1, flexDirection:'column', alignItems:'flex-end'}}>
-          <Row>
-            <BtnSm buttonStyle={{marginRight:4}} title="Edit" onPress={() => this.props.navigation.navigate('LogsheetPitstopSaranaEdit', {id: item.id, pitstopSaranaId: this.props.navigation.state.params.pitstopSaranaId } )}></BtnSm>
-            <BtnSm buttonStyle={{backgroundColor:'red'}} title="Hapus" onPress={() => this.deleteLogsheet(item.id)}></BtnSm>
-          </Row>
-        </View>
+        { this.state.status == 'input' &&
+          <View style={{flex:1, flexDirection:'column', alignItems:'flex-end'}}>
+            <Row>
+              <BtnSm buttonStyle={{marginRight:4}} title="Edit" onPress={() => this.props.navigation.navigate('LogsheetPitstopSaranaEdit', {id: item.id, pitstopSaranaId: this.props.navigation.state.params.pitstopSaranaId } )}></BtnSm>
+              <BtnSm buttonStyle={{backgroundColor:'red'}} title="Hapus" onPress={() => this.deleteLogsheet(item.id)}></BtnSm>
+            </Row>
+          </View>
+        } 
+        { this.state.status == 'rejected' &&
+          <View style={{flex:1, flexDirection:'column', alignItems:'flex-end'}}>
+            <Row>
+              <BtnSm buttonStyle={{marginRight:4}} title="Edit" onPress={() => this.props.navigation.navigate('LogsheetPitstopSaranaEdit', {id: item.id, pitstopSaranaId: this.props.navigation.state.params.pitstopSaranaId } )}></BtnSm>
+              <BtnSm buttonStyle={{backgroundColor:'red'}} title="Hapus" onPress={() => this.deleteLogsheet(item.id)}></BtnSm>
+            </Row>
+          </View>
+        } 
       </Row>
     </Card>
   )
 
   render() {
     const pitstopSaranaId = this.props.navigation.state.params.pitstopSaranaId;
+    const buttonAdd = this.state.detail.length == 0 ? true : false;
+    const buttonAddAndApprove = this.state.status == 'input' || this.state.status == 'rejected' && this.state.detail.length < 30 && this.state.detail.length >= 1 ? true : false;
+    const buttonApprove = this.state.detail.length == 30 ? true : false;
 
     return (
       <Container>
         <Content>
-          <Card>
+          <Card style={{borderColor:'#696969', borderRadius:3, borderWidth:1}}>
             <RowHeader> 
-              <RowHeaderContent title="Driver" content={this.state.driver} />
               <RowHeaderContent title="Fuelman" content={this.state.fuelman} />
+              <RowHeaderContent title="WHS Number" content={this.state.whs_number} />
             </RowHeader>
 
             <RowHeader> 
               <RowHeaderContent title="Tanggal" content={this.state.tanggal} />
-              <RowHeaderContent title="Shift" content={this.state.shift} />
-            </RowHeader>
-
-            <RowHeader> 
-              <RowHeaderContent title="WHS Number" content={this.state.whs_number} />
               <RowHeaderContent title="Location" content={this.state.location} />
             </RowHeader>
 
             <RowHeader> 
+              <RowHeaderContent title="Shift" content={this.state.shift} />
               <RowHeaderContent title="Total QTY Solar" content={this.state.total_qty_solar} />
+            </RowHeader>
+
+            <RowHeader> 
+              <RowHeaderContent title="Total Selisih Flow Meter" content={this.state.total_selisih_flow_meter} />
             </RowHeader>
           </Card>
 
@@ -110,7 +139,22 @@ export default class Index extends Component {
           />
 
         </Content>
-        <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => this.props.navigation.navigate('LogsheetPitstopSaranaCreate', { pitstopSaranaId: pitstopSaranaId })}/>
+        { buttonAddAndApprove &&
+          <ActionButton buttonColor="rgba(231,76,60,1)">
+            <ActionButton.Item buttonColor='green' onPress={() => this.finishInputDetail()} >
+              <Icon name='checkmark' style={{color:'white'}} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='blue' onPress={() => this.props.navigation.navigate('LogsheetPitstopSaranaCreate', { pitstopSaranaId: pitstopSaranaId })} >
+              <Icon name='add' style={{color:'white'}} />
+            </ActionButton.Item>
+          </ActionButton>
+        }
+        { buttonApprove &&
+          <ActionButton buttonColor="green" renderIcon={() => (<Icon name='checkmark' style={{color:'white'}} />)} onPress={() => this.finishInputDetail()}/>
+        }
+        { buttonAdd &&
+          <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => this.props.navigation.navigate('LogsheetPitstopSaranaCreate', { pitstopSaranaId: pitstopSaranaId })}/>
+        }
       </Container>
     );
   }
@@ -127,13 +171,16 @@ export default class Index extends Component {
     ServicePitstopSarana.findByCreatorWithDetail(id)
       .then(res => {
         this.setState({
+          id: res.id,
           driver: res.driver,
           fuelman: res.fuelman,
           tanggal: res.tanggal_view,
           shift: res.shift_view,
           whs_number: res.whs_number,
           location: res.location,
+          status: res.status,
           total_qty_solar: String(res.total_qty_solar),
+          total_selisih_flow_meter: String(res.selisih_flow_meter),
           detail: res.detail,
           refreshing: false
         })
@@ -183,6 +230,17 @@ export default class Index extends Component {
         },
       ],
     );
+  }
+
+  finishInputDetail = () => {
+    const pitstopSaranaId = this.props.navigation.state.params.pitstopSaranaId
+
+    ServicePitstopSarana.finishInputDetail(pitstopSaranaId)
+      .then(res => {
+        if(res.success) {
+          this.props.navigation.push('LogsheetPitstopSaranaIndex', { pitstopSaranaId:res.data.id })
+        }
+      })
   }
 }
 

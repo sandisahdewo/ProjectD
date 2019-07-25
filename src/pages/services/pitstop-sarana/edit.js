@@ -28,16 +28,16 @@ export default class Create extends Component {
       id: '',
       line: '',
       nomor: '',
-      driver: '',
-      fuelman: '',
+      // driver: '',
+      // fuelman: '',
       tanggal: '',
       shift: 'siang',
       whs_number: '',
       location:'',
 
       validation: {
-        driver: '',
-        fuelman: '',
+        whs_number: '',
+        location: '',
       }
     }
   }
@@ -77,8 +77,8 @@ export default class Create extends Component {
                 <View style={{borderBottomWidth:1, borderBottomColor:'#ccc'}}></View>
                 <View style={{marginTop:10, marginHorizontal:6}}>
 
-                  <InputFloatingLabelWithValidation title='Driver' value={this.state.driver} onChangeText={(driver) => this.setState({driver})} error={this.state.validation.driver} />
-                  <InputFloatingLabelWithValidation title='Fuelman' value={this.state.fuelman} onChangeText={(fuelman) => this.setState({fuelman})} error={this.state.validation.fuelman} />
+                  {/* <InputFloatingLabelWithValidation title='Driver' value={this.state.driver} onChangeText={(driver) => this.setState({driver})} error={this.state.validation.driver} /> */}
+                  {/* <InputFloatingLabelWithValidation title='Fuelman' value={this.state.fuelman} onChangeText={(fuelman) => this.setState({fuelman})} error={this.state.validation.fuelman} /> */}
                   <DateFloatingLabelWithValidation value={this.state.tanggal} title='Tanggal' onSelected={(tanggal) => this.setState({tanggal})} error={this.state.validation.tanggal} />
 
                   <View style={{marginBottom:7}}>
@@ -135,8 +135,8 @@ export default class Create extends Component {
         this.setState({
           id: id,
           line: res.line,
-          driver: res.driver,
-          fuelman: res.fuelman,
+          // driver: res.driver,
+          // fuelman: res.fuelman,
           tanggal: res.tanggal_view,
           shift: res.shift,
           whs_number: res.whs_number,
@@ -153,7 +153,7 @@ export default class Create extends Component {
   update = () => {
     const formData = {
       line: this.state.line,
-      driver: this.state.driver,
+      // driver: this.state.driver,
       tanggal: this.state.tanggal,
       shift: this.state.shift,
       whs_number: this.state.whs_number,
@@ -172,12 +172,11 @@ export default class Create extends Component {
         }
       })
       .catch(err => {
-        console.log(err)
         const validationMessage = err.response.data.errors;
         this.setState({
           validation: {
-            driver: validationMessage.driver,
-            fuelman: validationMessage.fuelman
+            whs_number: validationMessage.whs_number,
+            location: validationMessage.lokasi
           }
         })
       });
