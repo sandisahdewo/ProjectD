@@ -1,4 +1,6 @@
 import React from 'react';
+
+import Splash from '../pages/splash'
 import Login from "../pages/login/index";
 import Tab from "../pages/tab/index";
 
@@ -301,11 +303,12 @@ const DrawerNavigator = createDrawerNavigator({
 });
 
 const SwitchNavigator = createSwitchNavigator({
+  Splash: Splash,
   App: DrawerNavigator,
   Login: LoginStack
 },
 {
-  initialRouteName: 'App',
+  initialRouteName: 'Splash',
 });
 
 const Nav = createAppContainer(SwitchNavigator)

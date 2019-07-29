@@ -21,7 +21,7 @@ const deleteLogsheet = (id) => Delete('pitstop-sarana-detail/delete', id)
 const findLastLogsheet = () => Get(`pitstop-sarana-detail/find-last`)
 
 // Approval
-const getServiceIgnoreLineWithParams = (params) => Get(`pitstop-sarana/with-filter?nomor=${params.nomor}`)
+const getServiceIgnoreLineWithParams = (params) => Get(`pitstop-sarana/with-filter?nomor=${params.nomor}&tanggal=${params.tanggal}&shift=${params.shift}&status=${params.status}`)
 const findServiceWithDetail = (id) => Get(`pitstop-sarana/find-with-detail/${id}`)
 const approve = (id) => Get(`pitstop-sarana/approve/${id}`)
 const reject = (id) => Get(`pitstop-sarana/reject/${id}`)

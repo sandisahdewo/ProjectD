@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Login from '../../services/login';
 import { Text, View, KeyboardAvoidingView } from 'react-native';
-import Identity from '../../services/config/identity';
+import User from '../../storages/async-storage/user';
 import { Container, Item, Input, Icon, Button, Toast } from 'native-base';
 
 export default class Index extends Component {
@@ -60,7 +60,7 @@ export default class Index extends Component {
   }
 
   checkTokenValid = async () => {
-    let token = await Identity.getAccessToken();
+    let token = await User.getAccessToken();
     if(token !== null) {
       this.props.navigation.navigate('TabIndex');
     }
@@ -79,8 +79,8 @@ export default class Index extends Component {
     await Login.Attempt(formData)
       .then(res => {
         if(res.success) {
-          Identity.setUser(res.user);
-          Identity.setAccessToken(res.access_token);
+          User.setUser(res.user);
+          User.setAccessToken(res.access_token);
           this.props.navigation.navigate('TabIndex');
         }
       })

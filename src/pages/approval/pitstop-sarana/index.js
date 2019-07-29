@@ -1,16 +1,18 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 
-import Modal from "react-native-modal";
-import Row from '../../../components/row';
-import Vline from '../../../components/line';
-import { Button } from 'react-native-elements';
-import Column from '../../../components/column';
-import ServicePitstopSarana from '../../../services/pitstop-sarana';
-import RowContainerContent from '../../../components/logsheet/row-container-content';
-import { Container, Content, Card, Icon, Text, Item, Input, Label, Picker } from 'native-base';
-import { View, StyleSheet, Alert, DatePickerAndroid, FlatList, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
+import Modal from "react-native-modal"
+import Row from '../../../components/row'
+import Vline from '../../../components/line'
+import { Button } from 'react-native-elements'
+import Column from '../../../components/column'
+import ServicePitstopSarana from '../../../services/pitstop-sarana'
+import RowContainerContent from '../../../components/logsheet/row-container-content'
+import { Container, Content, Card, Icon, Text, Item, Input, Label, Picker } from 'native-base'
+import DateFloatingLabelWithValidation from '../../../components/input/DateFloatingLabelWithValidation'
+import { View, StyleSheet, Alert, FlatList, TouchableHighlight, TouchableWithoutFeedback } from 'react-native'
+import { format } from 'date-fns'
 
-let self = null;
+let self = null
 
 export default class Index extends Component {
 
@@ -24,21 +26,31 @@ export default class Index extends Component {
         </TouchableHighlight>
       ),
     }
-  };
+  }
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
+      filter_shift: '',
+      filter_tanggal: '',
+      filter_status: '',
       listPitstopSarana: [],
+      dataFound: true,
       isModalVisible: false
     }
   }
 
   componentDidMount() {
-    self = this;
+    self = this
+    this.setState({
+      filter_tanggal: format(new Date(), 'DD-MM-YYYY'),
+      filter_shift: 'siang',
+      filter_status: 'finish-input',
+      dataFound: true
+    })
     this.props.navigation.addListener('willFocus', 
       () => {
-        this.getWithFilter();
+        this.getWithFilter()
       }
     )
   }
@@ -126,15 +138,23 @@ export default class Index extends Component {
 
   render() {
     return (
-      <Container>
-        <Content>
-          <FlatList
-						keyExtractor={this.keyExtractor}
-						data={this.state.listPitstopSarana}
-						renderItem={this.renderItem}
-					/>
+      <View style={{flex:1}}>
+        {!this.state.dataFound && 
+          <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+            <Text>Tidak ada data untuk ditampilkan</Text>
+          </View>
+        }
 
-          {/* Modal untuk filter di bawah */}
+        {this.state.dataFound &&
+          <View>
+            <FlatList
+              keyExtractor={this.keyExtractor}
+              data={this.state.listPitstopSarana}
+              renderItem={this.renderItem}
+            />
+          </View>
+        }
+        <View>
           <Modal isVisible={this.state.isModalVisible} 
             swipeDirection={['right', 'down']}
             style={styles.bottomModal}
@@ -145,15 +165,12 @@ export default class Index extends Component {
               <View style={{height:40, marginBottom:7}}>
                 <Row style={{borderBottomColor:'#808080', justifyContent:'flex-start', alignItems:'center', borderBottomWidth:0.4}}>
                   <TouchableWithoutFeedback onPress={() => this.toggleModal()}>
-                    <Icon name='close' style={{fontSize:30, marginRight:10, color:'black'}} />
+                    <Icon name='close' style={{fontSize:20, marginRight:10, color:'black'}} />
                   </TouchableWithoutFeedback>
-                  <Text style={{fontSize:20}}>Filter Data</Text>
+                  <Text style={{fontSize:18}}>Filter Data</Text>
                 </Row>
               </View>
-              <Item floatingLabel>
-                <Label style={{fontSize:12}}>Tanggal</Label>
-                <Input value='07-05-2019' onTouchStart={() => setDate()} />
-              </Item>
+              <DateFloatingLabelWithValidation value={this.state.filter_tanggal} title='Tanggal' onSelected={(filter_tanggal) => this.setState({filter_tanggal})}/>
               </View>
               <View style={{marginBottom:7}}>
                 <Item>
@@ -166,7 +183,8 @@ export default class Index extends Component {
                       placeholderStyle={{ color: "#bfc6ea" }}
                       placeholderIconColor="#007aff"
                       style={{ width: undefined }}
-                      selectedValue={this.state.selectedJenisPetugas}
+                      onValueChange={(filter_shift) => this.setState({filter_shift})}
+                      selectedValue={this.state.filter_shift}
                     >
                       <Picker.Item label="Siang (07:00 - 17:00)" value="siang" />
                       <Picker.Item label="Malam (17:00 - 07:00)" value="malam" />
@@ -185,7 +203,8 @@ export default class Index extends Component {
                       placeholderStyle={{ color: "#bfc6ea" }}
                       placeholderIconColor="#007aff"
                       style={{ width: undefined }}
-                      selectedValue={this.state.selectedJenisPetugas}
+                      onValueChange={(filter_status) => this.setState({filter_status})}
+                      selectedValue={this.state.filter_status}
                     >
                       <Picker.Item label="Input" value="input" />
                       <Picker.Item label="Finish Input" value="finish-input" />
@@ -195,11 +214,11 @@ export default class Index extends Component {
                   </View>
                 </Item>
               </View>
-              <Button title="Terapkan" onPress={this.toggleModal} />
+              <Button title="Terapkan" onPress={() => { this.toggleModal(); this.getWithFilter() }} />
             </View>
           </Modal>
-        </Content>
-      </Container>
+        </View>
+      </View>
     );
   }
 
@@ -207,12 +226,23 @@ export default class Index extends Component {
     const pitstopSaranaNomor = this.props.navigation.state.params.pitstopSaranaNomor;
     const params = {
       nomor: pitstopSaranaNomor,
+      tanggal: this.state.filter_tanggal,
+      shift: this.state.filter_shift,
+      status: this.state.filter_status
     };
     ServicePitstopSarana.getServiceIgnoreLineWithParams(params)
       .then(res => {
-        this.setState({
-          listPitstopSarana: res
-        })
+        if(res <= 0) {
+          this.setState({
+            listPitstopSarana: [],
+            dataFound: false
+          })
+        } else {
+          this.setState({
+            listPitstopSarana: res,
+            dataFound: true
+          })
+        }
       })
       .catch(err => {
 
@@ -231,49 +261,3 @@ const styles = StyleSheet.create({
     margin: 0,
   },
 })
-
-const setDate = async () => {
-  try {
-    const {action, year, month, day} = await DatePickerAndroid.open({
-      // Use `new Date()` for current date.
-      // May 25 2020. Month 0 is January.
-      date: new Date(2000, 4, 25),
-      maxDate: new Date()
-    });
-    if (action !== DatePickerAndroid.dismissedAction) {
-
-    }
-  } catch ({code, message}) {
-    console.warn('Cannot open date picker', message);
-  }
-}
-
-const list = [
-  {
-    tab: 'Maintank Inlet',
-    subtab: 'Line 1',
-    lokasi: 'FH09089',
-    shift: 'Siang (07:00 - 17:00)',
-    tanggal: '09 Mei 2019',
-    petugas_inlet: 'Puryanto',
-    status: 'approved'
-  },
-  {
-    tab: 'Maintank Inlet',
-    subtab: 'Line 1',
-    lokasi: 'FH09089',
-    shift: 'Siang (07:00 - 17:00)',
-    tanggal: '09 Mei 2019',
-    petugas_inlet: 'Puryanto',
-    status: 'rejected'
-  },
-  {
-    tab: 'Maintank Inlet',
-    subtab: 'Line 1',
-    lokasi: 'FH09089',
-    shift: 'Siang (07:00 - 17:00)',
-    tanggal: '09 Mei 2019',
-    petugas_inlet: 'Puryanto',
-    status: 'input'
-  }
-];

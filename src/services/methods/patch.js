@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {RootPath} from '../config/path'
-import Identity from '../config/identity'
+import User from '../../storages/async-storage/user'
 
 // const config = {
 //   headers: {
@@ -23,7 +23,7 @@ import Identity from '../config/identity'
 // }
 
 const PatchWithToken = async (path, data) => {
-  let token = await Identity.getAccessToken();
+  let token = await User.getAccessToken();
   let headers = {
     headers: {
       'Authorization' : `Bearer ${token}`

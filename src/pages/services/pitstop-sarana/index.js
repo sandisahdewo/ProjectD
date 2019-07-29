@@ -34,6 +34,7 @@ export default class Index extends Component {
       dataFound: true,
       isFetching: false,
       toggleModal: false,
+      isLoading: true,
 
       // filter
       filter_tanggal: '',

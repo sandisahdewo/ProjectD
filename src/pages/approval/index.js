@@ -18,10 +18,6 @@ export default class Index extends Component {
 	
 	list = [
 		{
-			title: 'Maintank Inlet',
-			action: 'TabIndex'
-		},
-		{
 			title: 'Pitstop Sarana 1',
       action: 'ApprovalPitstopSaranaIndex',
       params: { pitstopSaranaNomor:1 }
@@ -30,38 +26,6 @@ export default class Index extends Component {
 			title: 'Pitstop Sarana 2',
       action: 'ApprovalPitstopSaranaIndex',
       params: { pitstopSaranaNomor:2 }
-		},
-		{
-			title: 'Pitstop 1',
-			action: 'ApprovalMaintankInletIndex'
-		},
-		{
-			title: 'Pitstop 2',
-			action: 'ApprovalMaintankInletIndex'
-		},
-		{
-			title: 'Pitstop 3',
-			action: 'ApprovalMaintankInletIndex'
-		},
-		{
-			title: 'Pitstop 4',
-			action: 'ApprovalMaintankInletIndex'
-		},
-		{
-			title: 'Pitstop 5',
-			action: 'ApprovalMaintankInletIndex'
-		},
-		{
-			title: 'Pitstop 6',
-			action: 'ApprovalMaintankInletIndex'
-		},
-		{
-			title: 'Pitstop 7',
-			action: 'ApprovalMaintankInletIndex'
-		},
-		{
-			title: 'Maintank Outlet',
-			action: 'ApprovalMaintankInletIndex'
 		},
 	];
 
