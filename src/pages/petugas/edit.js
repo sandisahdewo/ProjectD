@@ -31,15 +31,14 @@ export default class Edit extends Component {
     petugasId = this.props.navigation.state.params.petugasId;
     ServicePetugas.findPetugasById(petugasId)
       .then(res => {
-        data = res.data;
         this.setState({
-          id: data.id,
-          nama: data.nama,
-          username: data.username,
-          tanggal_lahir: data.tanggal_lahir,
-          no_hp: data.no_hp,
-          email: data.email,
-          peran: 'fuelman'
+          id: res.id,
+          nama: res.nama,
+          username: res.username,
+          tanggal_lahir: res.tanggal_lahir,
+          no_hp: res.no_hp,
+          email: res.email,
+          peran: res.peran
         });
       })
       .catch(err => {
@@ -185,6 +184,7 @@ export default class Edit extends Component {
                         >
                           <Picker.Item label="Fuelman" value="fuelman" />
                           <Picker.Item label="Pengawas" value="pengawas" />
+                          <Picker.Item label="Admin" value="admin" />
                         </Picker>
                       </View>
                     </Item>

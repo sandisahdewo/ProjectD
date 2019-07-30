@@ -19,12 +19,12 @@ export default class Index extends Component {
 	list = [
 		{
 			title: 'Pitstop Sarana 68',
-      action: 'ApprovalPitstopSaranaIndex',
+      action: 'DownloadReportPitstopSaranaIndex',
       params: { pitstopSaranaNomor:68 }
 		},
 		{
 			title: 'Pitstop Sarana 86',
-      action: 'ApprovalPitstopSaranaIndex',
+      action: 'DownloadReportPitstopSaranaIndex',
       params: { pitstopSaranaNomor:86 }
 		},
 	];

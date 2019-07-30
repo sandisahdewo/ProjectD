@@ -37,17 +37,17 @@ export default class Index extends Component {
             </Body>
           </TabContent>
 
-          <TabContent title="Pitstop Sarana 1">
+          <TabContent title="Pitstop Sarana 68">
             <Body style={style.tabContentBody}>
-              <TabContentButton text="Line 1" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaIndex', { pitstopSaranaNomor: 1, line: 'Line 1' })}/>
-              <TabContentButton text="Line 2" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaIndex', { pitstopSaranaNomor: 1, line: 'Line 2' })} />
+              <TabContentButton text="Line 1" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaIndex', { pitstopSaranaNomor: 68, line: 'Line 1' })}/>
+              <TabContentButton text="Line 2" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaIndex', { pitstopSaranaNomor: 68, line: 'Line 2' })} />
             </Body>
           </TabContent>
 
-          <TabContent title="Pitstop Sarana 2">
+          <TabContent title="Pitstop Sarana 86">
             <Body style={style.tabContentBody}>
-              <TabContentButton text="Line 1" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaIndex', { pitstopSaranaNomor: 2, line: 'Line 1' })}/>
-              <TabContentButton text="Line 2" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaIndex', { pitstopSaranaNomor: 2, line: 'Line 2' })} />
+              <TabContentButton text="Line 1" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaIndex', { pitstopSaranaNomor: 86, line: 'Line 1' })}/>
+              <TabContentButton text="Line 2" onPress={() => this.props.navigation.navigate('ServicePitstopSaranaIndex', { pitstopSaranaNomor: 86, line: 'Line 2' })} />
             </Body>
           </TabContent>
 

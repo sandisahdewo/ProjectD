@@ -1,4 +1,4 @@
-import {Get, Post, Patch, Delete, GetBlob} from './methods'
+import {Get, Post, Patch} from './methods'
 
 const findPetugasById = (id) => Get(`petugas/find/${id}`);
 const getAllPetugas = () => Get('petugas');

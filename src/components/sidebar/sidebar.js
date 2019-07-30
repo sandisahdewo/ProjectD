@@ -32,6 +32,10 @@ export default class SideBar extends React.Component {
   }
 
   render() {
+    const roleFuelman = this.state.user.peran == 'fuelman'
+    const rolePengawas = this.state.user.peran == 'pengawas'
+    const roleAdmin = this.state.user.peran == 'admin'
+
     return (
       <Container>
         <Content>
@@ -47,10 +51,21 @@ export default class SideBar extends React.Component {
             </View>
           </View>
           <View style={{flex:1, marginVertical:7, marginHorizontal: 10}}>
-            <BtnSidebar onPress={() => this.props.navigation.navigate('TabIndex')} title="Tab" iconName="briefcase" />
-            <BtnSidebar onPress={() => this.props.navigation.navigate('ApprovalIndex')} title="Approval" iconName="checkmark" />
-            <BtnSidebar onPress={() => this.props.navigation.navigate('PetugasIndex')} title="Petugas" iconName="person" />
-            <BtnSidebar onPress={() => this.props.navigation.navigate('UnitIndex')} title="Unit" iconName="car" />
+            {(roleFuelman || roleAdmin || rolePengawas) &&
+              <BtnSidebar onPress={() => this.props.navigation.navigate('TabIndex')} title="Tab" iconName="briefcase" />
+            }
+            {(roleAdmin || rolePengawas) &&
+              <BtnSidebar onPress={() => this.props.navigation.navigate('ApprovalIndex')} title="Approval" iconName="checkmark" />
+            }
+            {(roleAdmin || rolePengawas) &&
+              <BtnSidebar onPress={() => this.props.navigation.navigate('PetugasIndex')} title="Petugas" iconName="person" />
+            }
+            {(roleAdmin || rolePengawas) &&
+              <BtnSidebar onPress={() => this.props.navigation.navigate('UnitIndex')} title="Unit" iconName="car" />
+            }
+            {roleAdmin && 
+              <BtnSidebar onPress={() => this.props.navigation.navigate('DownloadReportIndex')} title="Laporan" iconName="download" />
+            }
             <BtnSidebar onPress={() => this.logout()} title="Logout" iconName="power"/>
           </View>
         </Content>

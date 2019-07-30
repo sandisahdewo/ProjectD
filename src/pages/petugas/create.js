@@ -174,6 +174,7 @@ export default class Create extends Component {
                         >
                           <Picker.Item label="Fuelman" value="fuelman" />
                           <Picker.Item label="Pengawas" value="pengawas" />
+                          <Picker.Item label="Admin" value="admin" />
                         </Picker>
                       </View>
                     </Item>

@@ -34,6 +34,10 @@ import UnitIndex from "../pages/unit/index";
 import UnitCreate from "../pages/unit/create";
 import UnitEdit from "../pages/unit/edit";
 
+import DownloadReportIndex from '../pages/download-report/index'
+import DownloadReportPitstopSaranaIndex from '../pages/download-report/pitstop-sarana/index'
+import DownloadReportPitstopSaranaDetail from '../pages/download-report/pitstop-sarana/detail'
+
 import Sidebar from "../components/sidebar/sidebar"
 import { createSwitchNavigator, createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation';
 
@@ -293,6 +297,37 @@ const PageStack = createStackNavigator({
       }
     }) 
   },
+
+  DownloadReportIndex: {
+    screen: DownloadReportIndex,
+    navigationOptions: () => ({
+      title: 'Download Laporan',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    })
+  },
+  DownloadReportPitstopSaranaIndex: {
+    screen: DownloadReportPitstopSaranaIndex,
+    navigationOptions: () => ({
+      title: 'Download Laporan Pitstop Sarana',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    })
+  },
+  DownloadReportPitstopSaranaDetail: {
+    screen: DownloadReportPitstopSaranaDetail,
+    navigationOptions: () => ({
+      title: 'Download Laporan Pitstop Sarana',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    })
+  }
 });
 
 const DrawerNavigator = createDrawerNavigator({

@@ -37,36 +37,6 @@ export default class Detail extends Component {
     this.findWithDetail(pitstopSaranaId);
   }
 
-  approveItem = (id) => {
-    Alert.alert(
-      'Apakah yakin akan menyetujui Logsheet?',
-      '',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {text: 'OK', onPress: () => this.approve(id) },
-      ],
-    );
-  }
-
-  rejectItem = (id) => {
-    Alert.alert(
-      'Apakah yakin akan tidak menyetujui Logsheet?',
-      '',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {text: 'OK', onPress: () => this.reject(id) },
-      ],
-    );
-  }
-
 	keyExtractor = (item, index) => index.toString();
 
   renderItem = ({ item }) => (
@@ -92,10 +62,6 @@ export default class Detail extends Component {
   );
 
   render() {
-    const showRejectButton = this.state.status == 'finish-input' ? true : false;
-    const showApproveButton = this.state.status == 'finish-input' || this.state.status == 'rejected' ? true : false;
-    const showDownloadButton = this.state.status == 'approved' ? true : false;
-
     return (
       <Container>
         <Content>
@@ -127,23 +93,6 @@ export default class Detail extends Component {
 					/>
 
           <View style={{flex:1, flexDirection:'row', marginBottom:2}}>
-          {showApproveButton && 
-            <View style={{flex:1, margin:4}}>
-              <Button iconLeft full success onPress={() => this.approveItem(this.state.id) }>
-                <Icon name='checkmark' />
-                <Text style={{color:'white', fontSize:16, marginLeft:5}}>Approve</Text>
-              </Button>
-            </View>
-          }
-          {showRejectButton && 
-            <View style={{flex:1, margin:4}}>
-              <Button iconLeft full danger onPress={() => this.rejectItem(this.state.id) }>
-                <Icon name='close' />
-                <Text style={{color:'white', fontSize:16, marginLeft:5}}>Reject</Text>
-              </Button>
-            </View>
-          }
-          {showDownloadButton && 
             <View style={{flex:1, margin:4}}>
               <Button iconLeft full success onPress={() => this.downloadExcel(this.state.id) }>
                 <Icon name='file-excel-o' type='FontAwesome' />
@@ -154,7 +103,6 @@ export default class Detail extends Component {
                 <Text style={{color:'white', fontSize:16, marginLeft:5}}>Download PDF</Text>
               </Button>
             </View>
-          }
           </View>
         </Content>
       </Container>
@@ -181,63 +129,6 @@ export default class Detail extends Component {
       .catch(err => {
         console.log('err', err)
       })
-  }
-
-  approve = (id) => {
-    const pitstopSaranaNomor = this.props.navigation.state.params.pitstopSaranaNomor;
-    ServicePitstopSarana.approve(id)
-      .then(res => {
-        if(res.success) {
-          Toast.show({
-            text: 'Berhasil approve pitstop sarana!',
-            buttonText: 'Okay',
-            type:'success'
-          })
-          this.props.navigation.navigate('ApprovalPitstopSaranaIndex', { pitstopSaranaNomor : pitstopSaranaNomor })
-        } else {
-          Toast.show({
-            text: 'Gagal approve pitstop sarana!',
-            buttonText: 'Okay',
-            type:'danger'
-          })
-        }
-      })
-      .catch(err => {
-        Toast.show({
-          text: err.message,
-          buttonText: 'Okay',
-          type:'danger'
-        })
-      })
-  }
-
-  reject = (id) => {
-    const pitstopSaranaNomor = this.props.navigation.state.params.pitstopSaranaNomor;
-
-    ServicePitstopSarana.reject(id)
-    .then(res => {
-      if(res.success) {
-        Toast.show({
-          text: 'Berhasil reject pitstop sarana!',
-          buttonText: 'Okay',
-          type:'success'
-        })
-        this.props.navigation.navigate('ApprovalPitstopSaranaIndex', { pitstopSaranaNomor : pitstopSaranaNomor })
-      } else {
-        Toast.show({
-          text: 'Gagal reject pitstop sarana!',
-          buttonText: 'Okay',
-          type:'danger'
-        })
-      }
-    })
-    .catch(err => {
-      Toast.show({
-        text: err.message,
-        buttonText: 'Okay',
-        type:'danger'
-      })
-    })
   }
 
   downloadExcel = (id) => {
