@@ -60,7 +60,7 @@ export default class SideBar extends React.Component {
             {(roleAdmin || rolePengawas) &&
               <BtnSidebar onPress={() => this.props.navigation.navigate('PetugasIndex')} title="Petugas" iconName="person" />
             }
-            {(roleAdmin || rolePengawas) &&
+            {(roleAdmin || rolePengawas || roleFuelman) &&
               <BtnSidebar onPress={() => this.props.navigation.navigate('UnitIndex')} title="Unit" iconName="car" />
             }
             {roleAdmin && 

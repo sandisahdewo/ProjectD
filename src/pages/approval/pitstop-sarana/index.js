@@ -45,7 +45,7 @@ export default class Index extends Component {
     this.setState({
       filter_tanggal: format(new Date(), 'DD-MM-YYYY'),
       filter_shift: 'siang',
-      filter_status: 'finish-input',
+      filter_status: '',
       dataFound: true
     })
     this.props.navigation.addListener('willFocus', 
@@ -230,6 +230,7 @@ export default class Index extends Component {
       shift: this.state.filter_shift,
       status: this.state.filter_status
     };
+    console.log('statts', params)
     ServicePitstopSarana.getServiceIgnoreLineWithParams(params)
       .then(res => {
         if(res <= 0) {

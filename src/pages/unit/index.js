@@ -4,6 +4,7 @@ import {Input, ListItem} from 'react-native-elements';
 import ActionButton from 'react-native-action-button';
 import {View, Text, RefreshControl} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
+import User from '../../storages/async-storage/user'
 
 export default class Index extends Component {
   constructor(props) {
@@ -13,6 +14,10 @@ export default class Index extends Component {
       page: 1,
       q: '',
       unit: [],
+
+      user: {
+        petugas: {}
+      },
     }
   }
 
@@ -20,8 +25,14 @@ export default class Index extends Component {
     this.props.navigation.addListener('willFocus', 
       () => {
         this.handleRefresh();
+        this.getUserLogin()
       }
     )
+  }
+
+  getUserLogin = async () => {
+    const user = await User.getUser()
+    this.setState({user})
   }
 
   getUnit = () => {
@@ -92,6 +103,9 @@ export default class Index extends Component {
   )
 
   render() {
+    const rolePengawas = this.state.user.peran == 'pengawas'
+    const roleAdmin = this.state.user.peran == 'admin'
+
     return (
       <View style={{flex:1}}>
         <View>
@@ -119,7 +133,9 @@ export default class Index extends Component {
             onEndReached={() => this.handleLoadMore()}
           />
         </View>
-        <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => this.props.navigation.navigate('UnitCreate')}/>
+        {(roleAdmin || rolePengawas) &&
+          <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => this.props.navigation.navigate('UnitCreate')}/>
+        }
       </View>
     );
   }

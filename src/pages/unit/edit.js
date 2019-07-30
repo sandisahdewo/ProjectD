@@ -4,12 +4,16 @@ import ServiceUnit from '../../services/unit';
 import {Button} from 'react-native-elements';
 import {View, KeyboardAvoidingView, Alert} from 'react-native';
 import InputWithValidation from '../../components/input/FloatingLabelWithValidation';
+import User from '../../storages/async-storage/user'
 
 export default class Edit extends Component {
   
   constructor(props) {
     super(props)
     this.state = {
+      user: {
+        petugas: {}
+      },
       kode_unit: '',
       tipe_unit: '',
       no_polisi: '',
@@ -26,9 +30,18 @@ export default class Edit extends Component {
 
   componentDidMount = () => {
     this.find();
+    this.getUserLogin()
+  }
+
+  getUserLogin = async () => {
+    const user = await User.getUser()
+    this.setState({user})
   }
 
   render() {
+    const rolePengawas = this.state.user.peran == 'pengawas'
+    const roleAdmin = this.state.user.peran == 'admin'
+
     return (
       <View style={{flex:1}}>
         <KeyboardAvoidingView behavior='padding'>
@@ -37,12 +50,16 @@ export default class Edit extends Component {
             <InputWithValidation title='Tipe Unit' value={this.state.tipe_unit} onChangeText={(tipe_unit) => this.setState({tipe_unit})} error={this.state.validation.tipe_unit} />
             <InputWithValidation title='No Polisi' value={this.state.no_polisi} onChangeText={(no_polisi) => this.setState({no_polisi})} error={this.state.validation.no_polisi} />
             <InputWithValidation title='Jatah Solar' value={this.state.jatah_solar} onChangeText={(jatah_solar) => this.setState({jatah_solar})} error={this.state.validation.jatah_solar} />
-            <View>
-              <Button title='Perbarui' onPress={() => this.update()}></Button>
-            </View>
-            <View style={{marginTop:7}}>
-              <Button title='Hapus' buttonStyle={{backgroundColor:'red'}} onPress={() => this.destroy()}></Button>
-            </View>
+            {(roleAdmin || rolePengawas) &&
+              <View>
+                <View>
+                  <Button title='Perbarui' onPress={() => this.update()}></Button>
+                </View>
+                <View style={{marginTop:7}}>
+                  <Button title='Hapus' buttonStyle={{backgroundColor:'red'}} onPress={() => this.destroy()}></Button>
+                </View>
+              </View>
+            }
           </Card>
         </KeyboardAvoidingView>
       </View>

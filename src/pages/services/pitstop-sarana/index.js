@@ -48,7 +48,7 @@ export default class Index extends Component {
     self = this;
     
     this.setState({
-      filter_tanggal: format(new Date(), 'DD-MM-YYYY')
+      filter_tanggal: format(new Date(), 'DD-MM-YYYY'),
     })
 
     this.props.navigation.addListener('willFocus', 
@@ -128,7 +128,7 @@ export default class Index extends Component {
           {(item.status == 'input' || item.status == 'rejected') && 
             <Row style={{justifyContent:'flex-end'}}>
               <BtnSm buttonStyle={{marginRight:4, backgroundColor:'#FFBF00'}} onPress={() => this.props.navigation.navigate('ServicePitstopSaranaEdit', {id: item.id})} title="Edit"></BtnSm>
-              <BtnSm buttonStyle={{backgroundColor:'red'}} onPress={() => this.deleteItem(item)} title="Hapus"></BtnSm>
+              {/* <BtnSm buttonStyle={{backgroundColor:'red'}} onPress={() => this.deleteItem(item)} title="Hapus"></BtnSm> */}
             </Row>
           }
           </Row>
