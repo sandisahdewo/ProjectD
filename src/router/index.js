@@ -38,6 +38,8 @@ import DownloadReportIndex from '../pages/download-report/index'
 import DownloadReportPitstopSaranaIndex from '../pages/download-report/pitstop-sarana/index'
 import DownloadReportPitstopSaranaDetail from '../pages/download-report/pitstop-sarana/detail'
 
+import ChangePassword from '../pages/change-password/form'
+
 import Sidebar from "../components/sidebar/sidebar"
 import { createSwitchNavigator, createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation';
 
@@ -322,6 +324,16 @@ const PageStack = createStackNavigator({
     screen: DownloadReportPitstopSaranaDetail,
     navigationOptions: () => ({
       title: 'Download Laporan Pitstop Sarana',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#3C8DBC',
+      }
+    })
+  },
+  ChangePassword: {
+    screen: ChangePassword,
+    navigationOptions: () => ({
+      title: 'Ganti Password',
       headerTintColor: 'white',
       headerStyle: {
         backgroundColor: '#3C8DBC',

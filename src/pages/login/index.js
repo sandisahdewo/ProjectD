@@ -82,6 +82,15 @@ export default class Index extends Component {
           User.setUser(res.user);
           User.setAccessToken(res.access_token);
           this.props.navigation.navigate('TabIndex');
+        } else {
+          Toast.show({
+            text: 'Username & password salah',
+            buttonText: 'Oops',
+            type:'danger'
+          })
+          this.setState({
+            loginLoading: false
+          })
         }
       })
       .catch(err => {

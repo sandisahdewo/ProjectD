@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { View, StyleSheet, TouchableHighlight, FlatList, TouchableWithoutFeedback } from 'react-native';
-import { Container, Content, Card, Icon, Text } from 'native-base';
+import { Container, Content, Card, Icon, Text, Toast } from 'native-base';
 import { Button } from 'react-native-elements';
 import ActionButton from 'react-native-action-button';
 import ServicePetugas from '../../services/petugas'
@@ -23,17 +23,41 @@ export default class Index extends Component {
   };
 
   componentDidMount() {
-    this.getAllPetugas();
+    this.props.navigation.addListener('willFocus', 
+      () => {
+        this.getAllPetugas();
+      }
+    )
   }
 
   getAllPetugas = async () => {
     await ServicePetugas.getAllPetugas()
             .then(res => {
-              this.setState({listPetugas:res});
+              this.setState({listPetugas:res})
             })
             .catch(err => {
               console.log(err)
             })
+  }
+
+  toggleStatus = async (id) => {
+    await ServicePetugas.toggleStatus(id)
+      .then(res => {
+        this.getAllPetugas()
+        Toast.show({
+          text: 'Berhasil mengubah status aktif petugas',
+          buttonText: 'Okay',
+          type:'success'
+        })
+      })
+      .catch(err => {
+        Toast.show({
+          text: err.message,
+          buttonText: 'Okay',
+          type:'danger'
+        })
+        console.log('err', err)
+      })
   }
 
   keyExtractor = (item, index) => index.toString();
@@ -57,8 +81,8 @@ export default class Index extends Component {
             </View>
             <View style={{flexDirection:'column'}}>
               <View>
-                <Text style={{fontSize:14, fontWeight:'bold'}}>Alamat</Text>
-                <Text style={{fontSize:12}}>{item.alamat}</Text>
+                <Text style={{fontSize:14, fontWeight:'bold'}}>No HP</Text>
+                <Text style={{fontSize:12}}>{item.no_hp}</Text>
               </View>
             </View>
           </View>
@@ -79,9 +103,9 @@ export default class Index extends Component {
             </View>
             <View style={{flexDirection:'column'}}>
               {(item.status == 'aktif') &&
-                <Button title="Disable?" icon={{ name:'close', size:19, color:'white' }} fontSize={8} buttonStyle={{padding:3, paddingRight:10, backgroundColor:'red', borderRadius:0}} />
+                <Button onPress={() => this.toggleStatus(item.id)} title="Disable?" icon={{ name:'close', size:19, color:'white' }} fontSize={8} buttonStyle={{padding:3, paddingRight:10, backgroundColor:'red', borderRadius:0}} />
               }{(item.status == 'non-aktif') &&
-                <Button title="Activate?" icon={{ name:'check', size:19, color:'white' }} fontSize={8} buttonStyle={{padding:3, paddingRight:10, backgroundColor:'green', borderRadius:0}} />
+                <Button onPress={() => this.toggleStatus(item.id)} title="Activate?" icon={{ name:'check', size:19, color:'white' }} fontSize={8} buttonStyle={{padding:3, paddingRight:10, backgroundColor:'green', borderRadius:0}} />
               }
             </View>
           </View>

@@ -66,6 +66,7 @@ export default class SideBar extends React.Component {
             {roleAdmin && 
               <BtnSidebar onPress={() => this.props.navigation.navigate('DownloadReportIndex')} title="Laporan" iconName="download" />
             }
+            <BtnSidebar onPress={() => this.props.navigation.navigate('ChangePassword')} title="Ganti Password" iconName="key"/>
             <BtnSidebar onPress={() => this.logout()} title="Logout" iconName="power"/>
           </View>
         </Content>
