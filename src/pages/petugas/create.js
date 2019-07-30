@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import { View, StyleSheet, Text, DatePickerAndroid, KeyboardAvoidingView } from 'react-native';
+import { View, Text, DatePickerAndroid, KeyboardAvoidingView } from 'react-native';
 import { Container, Content, Card, Item, Input, Label, Picker, Icon, Toast} from 'native-base';
 import { Button } from 'react-native-elements';
 import ServicePetugas from '../../services/petugas'
+import Loading from '../../components/loading'
 
 export default class Create extends Component {
   static navigationOptions = {
@@ -28,6 +29,7 @@ export default class Create extends Component {
   }
 
   save = () => {
+    this.setLoading()
     const formData = {
       nama: this.state.nama,
       username: this.state.username,
@@ -46,6 +48,8 @@ export default class Create extends Component {
             buttonText: 'Okay',
             type:'success'
           })
+          this.unsetLoading()
+          this.props.navigation.navigate('PetugasIndex')
         }
       })
       .catch(err => {
@@ -54,6 +58,7 @@ export default class Create extends Component {
             buttonText: 'Coba Lagi',
             type:'danger'
           })
+          this.unsetLoading()
       });
   }
 
@@ -84,10 +89,23 @@ export default class Create extends Component {
     });
   }
 
+  setLoading = () => {
+    this.setState({
+      loading: true
+    })
+  }
+
+  unsetLoading = () => {
+    this.setState({
+      loading: false
+    })
+  }
+
   render() {
     return (
       <Container>
         <Content>
+          <Loading loading={this.state.loading} />
           <KeyboardAvoidingView behavior="padding">
             <Card style={{marginLeft:5, marginRight:5}}>
               <View style={{flex:1}}>

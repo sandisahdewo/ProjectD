@@ -6,25 +6,20 @@ import ServicePitstopSarana from '../../../services/pitstop-sarana';
 import InputFloatingLabelWithValidation from '../../../components/input/FloatingLabelWithValidation'
 import DateFloatingLabelWithValidation from '../../../components/input/DateFloatingLabelWithValidation'
 import {format} from 'date-fns';
+import Loading from '../../../components/loading';
 
 export default class Create extends Component {
 
 	static navigationOptions = ({ navigation }) => {
-    // return {
-    //   headerLeft: (
-    //     <TouchableHighlight onPress={() => navigation.openDrawer() }>
-    //       <View style={{marginLeft: 15}}>
-    //         <Icon name="ios-menu" size={28} style={{ color:'white' }}/>
-    //       </View>
-    //     </TouchableHighlight>
-    //   ),
-    // }
+   
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
+      loading: false,
+
       nomor: '',
       line: '',
       // driver: '',
@@ -53,6 +48,7 @@ export default class Create extends Component {
     return (
       <Container>
         <Content>
+          <Loading loading={this.state.loading} />
           <KeyboardAvoidingView behavior="padding">
             <Card style={{marginLeft:5, marginRight:5}}>
               <View style={{flex:1}}>
@@ -132,6 +128,7 @@ export default class Create extends Component {
   }
 
   post = () => {
+    this.setLoading()
     this.setState({
       validation: {}
     })
@@ -171,6 +168,19 @@ export default class Create extends Component {
           buttonText: 'Coba Lagi',
           type:'danger'
         })
+        this.unsetLoading()
       });
+  }
+
+  setLoading = () => {
+    this.setState({
+      loading: true
+    })
+  }
+
+  unsetLoading = () => {
+    this.setState({
+      loading: false
+    })
   }
 }

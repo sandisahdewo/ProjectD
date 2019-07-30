@@ -2,29 +2,22 @@ import React, {Component} from 'react';
 import { View, Text, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { Container, Content, Card, Item, Input, Label, Picker, Icon, Toast} from 'native-base';
 import { Button } from 'react-native-elements';
-import { format } from 'date-fns';
 import ServicePitstopSarana from '../../../services/pitstop-sarana';
 import InputFloatingLabelWithValidation from '../../../components/input/FloatingLabelWithValidation'
 import DateFloatingLabelWithValidation from '../../../components/input/DateFloatingLabelWithValidation'
+import Loading from '../../../components/loading';
 
 export default class Create extends Component {
 
 	static navigationOptions = ({ navigation }) => {
-    // return {
-    //   headerLeft: (
-    //     <TouchableHighlight onPress={() => navigation.openDrawer() }>
-    //       <View style={{marginLeft: 15}}>
-    //         <Icon name="ios-menu" size={28} style={{ color:'white' }}/>
-    //       </View>
-    //     </TouchableHighlight>
-    //   ),
-    // }
+    
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
+      loading: true,
       id: '',
       line: '',
       nomor: '',
@@ -51,6 +44,7 @@ export default class Create extends Component {
     return (
       <Container>
         <Content>
+          <Loading loading={this.state.loading} />
           <KeyboardAvoidingView behavior="padding">
             <Card style={{marginLeft:5, marginRight:5}}>
               <View style={{flex:1}}>
@@ -130,6 +124,7 @@ export default class Create extends Component {
   }
 
   find = async (id) => {
+    this.setLoading()
     await ServicePitstopSarana.findServiceById(id)
       .then(res => {
         this.setState({
@@ -142,15 +137,17 @@ export default class Create extends Component {
           whs_number: res.whs_number,
           location: res.location,
         })
-
+        this.unsetLoading()
       })
       .catch(err => {
         console.log(err)
+        this.unsetLoading()
       })
 
   }
 
   update = () => {
+    this.setLoading()
     const formData = {
       line: this.state.line,
       // driver: this.state.driver,
@@ -179,6 +176,19 @@ export default class Create extends Component {
             location: validationMessage.lokasi
           }
         })
+        this.unsetLoading()
       });
+  }
+
+  setLoading = () => {
+    this.setState({
+      loading: true
+    })
+  }
+
+  unsetLoading = () => {
+    this.setState({
+      loading: false
+    })
   }
 }

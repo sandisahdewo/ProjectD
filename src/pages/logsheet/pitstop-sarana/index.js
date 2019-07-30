@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Row from '../../../components/row';
 import Vline from '../../../components/line';
 import Column from '../../../components/column';
+import Loading from '../../../components/loading'
 import BtnSm from '../../../components/button/small';
 import ActionButton from 'react-native-action-button';
 import { Container, Content, Card, Toast, Icon } from 'native-base';
@@ -26,6 +27,7 @@ export default class Index extends Component {
     super(props)
 
     this.state = {
+      loading: true,
       id: '',
       driver: '',
       fuelman: '',
@@ -109,6 +111,7 @@ export default class Index extends Component {
     return (
       <Container>
         <Content>
+          <Loading loading={this.state.loading}/>
           <Card style={{borderColor:'#696969', borderRadius:3, borderWidth:1}}>
             <RowHeader> 
               <RowHeaderContent title="Fuelman" content={this.state.fuelman} />
@@ -168,6 +171,7 @@ export default class Index extends Component {
   }
 
   findByCreatorWithDetail = (id) => {
+    this.setLoading()
     ServicePitstopSarana.findByCreatorWithDetail(id)
       .then(res => {
         this.setState({
@@ -184,6 +188,7 @@ export default class Index extends Component {
           detail: res.detail,
           refreshing: false
         })
+        this.unsetLoading()
       })
       .catch(err => {
         console.log('err', err)
@@ -202,6 +207,7 @@ export default class Index extends Component {
         {
           text: 'OK', 
           onPress: () => {
+            this.setLoading()
             ServicePitstopSarana.deleteLogsheet(id)
             .then(res => {
               if(res.success) {
@@ -211,12 +217,14 @@ export default class Index extends Component {
                   type:'success'
                 })
                 this.handleRefresh();
+                this.unsetLoading()
               } else {
                 Toast.show({
                   text: 'Gagal menghapus logsheet!',
                   buttonText: 'Okay',
                   type:'success'
                 })
+                this.unsetLoading()
               }
             })
             .catch(err => {
@@ -225,6 +233,7 @@ export default class Index extends Component {
                 buttonText: 'Okay',
                 type:'danger'
               })
+              this.unsetLoading()
             })
           }
         },
@@ -233,6 +242,7 @@ export default class Index extends Component {
   }
 
   finishInputDetail = () => {
+    this.setLoading()
     const pitstopSaranaId = this.props.navigation.state.params.pitstopSaranaId
 
     ServicePitstopSarana.finishInputDetail(pitstopSaranaId)
@@ -241,6 +251,27 @@ export default class Index extends Component {
           this.props.navigation.push('LogsheetPitstopSaranaIndex', { pitstopSaranaId:res.data.id })
         }
       })
+      .catch(err => {
+        Toast.show({
+          text: err.message,
+          buttonText: 'Okay',
+          type:'danger'
+        })
+      })
+
+      this.unsetLoading()
+  }
+
+  setLoading = () => {
+    this.setState({
+      loading: true
+    })
+  }
+
+  unsetLoading = () => {
+    this.setState({
+      loading: false
+    })
   }
 }
 

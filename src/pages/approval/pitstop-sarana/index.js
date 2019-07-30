@@ -7,10 +7,11 @@ import { Button } from 'react-native-elements'
 import Column from '../../../components/column'
 import ServicePitstopSarana from '../../../services/pitstop-sarana'
 import RowContainerContent from '../../../components/logsheet/row-container-content'
-import { Container, Content, Card, Icon, Text, Item, Input, Label, Picker } from 'native-base'
+import { Card, Icon, Text, Item, Label, Picker } from 'native-base'
 import DateFloatingLabelWithValidation from '../../../components/input/DateFloatingLabelWithValidation'
 import { View, StyleSheet, Alert, FlatList, TouchableHighlight, TouchableWithoutFeedback } from 'react-native'
 import { format } from 'date-fns'
+import Loading from '../../../components/loading'
 
 let self = null
 
@@ -31,6 +32,7 @@ export default class Index extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      loading: true,
       filter_shift: '',
       filter_tanggal: '',
       filter_status: '',
@@ -139,6 +141,7 @@ export default class Index extends Component {
   render() {
     return (
       <View style={{flex:1}}>
+        <Loading loading={this.state.loading}/>
         {!this.state.dataFound && 
           <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
             <Text>Tidak ada data untuk ditampilkan</Text>
@@ -230,18 +233,19 @@ export default class Index extends Component {
       shift: this.state.filter_shift,
       status: this.state.filter_status
     };
-    console.log('statts', params)
     ServicePitstopSarana.getServiceIgnoreLineWithParams(params)
       .then(res => {
         if(res <= 0) {
           this.setState({
             listPitstopSarana: [],
-            dataFound: false
+            dataFound: false,
+            loading: false
           })
         } else {
           this.setState({
             listPitstopSarana: res,
-            dataFound: true
+            dataFound: true,
+            loading: false
           })
         }
       })

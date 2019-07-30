@@ -7,6 +7,7 @@ import ServicePitstopSarana from '../../../services/pitstop-sarana';
 import { Container, Content, Card, Button, Icon, Toast } from 'native-base';
 import RowHeaderContent from '../../../components/logsheet/row-header-content';
 import RowContainerContent from '../../../components/logsheet/row-container-content';
+import Loading from '../../../components/loading'
 
 export default class Detail extends Component {
   static navigationOptions = {
@@ -16,6 +17,7 @@ export default class Detail extends Component {
     super(props)
 
     this.state = {
+      loading: true,
       id: '',
       driver: '',
       fuelman: '',
@@ -99,6 +101,7 @@ export default class Detail extends Component {
     return (
       <Container>
         <Content>
+          <Loading loading={this.state.loading}/>
           <Card>
           <RowHeader> 
               <RowHeaderContent title="Fuelman" content={this.state.fuelman} />
@@ -165,6 +168,7 @@ export default class Detail extends Component {
     ServicePitstopSarana.findServiceWithDetail(id)
       .then(res => {
         this.setState({
+          loading: false,
           id: res.id,
           driver: res.driver,
           fuelman: res.fuelman,
@@ -184,6 +188,7 @@ export default class Detail extends Component {
   }
 
   approve = (id) => {
+    this.setLoading()
     const pitstopSaranaNomor = this.props.navigation.state.params.pitstopSaranaNomor;
     ServicePitstopSarana.approve(id)
       .then(res => {
@@ -201,6 +206,7 @@ export default class Detail extends Component {
             type:'danger'
           })
         }
+        this.unsetLoading()
       })
       .catch(err => {
         Toast.show({
@@ -208,10 +214,12 @@ export default class Detail extends Component {
           buttonText: 'Okay',
           type:'danger'
         })
+        this.unsetLoading()
       })
   }
 
   reject = (id) => {
+    this.setLoading()
     const pitstopSaranaNomor = this.props.navigation.state.params.pitstopSaranaNomor;
 
     ServicePitstopSarana.reject(id)
@@ -230,6 +238,7 @@ export default class Detail extends Component {
           type:'danger'
         })
       }
+      this.unsetLoading()
     })
     .catch(err => {
       Toast.show({
@@ -237,10 +246,12 @@ export default class Detail extends Component {
         buttonText: 'Okay',
         type:'danger'
       })
+      this.unsetLoading()
     })
   }
 
   downloadExcel = (id) => {
+    this.setLoading()
     const title = `pitstop-sarana ${this.state.fuelman} ${this.state.tanggal} ${this.state.shift}.xlsx`;
     ServicePitstopSarana.exportExcel(id, title)
       .then(res => {
@@ -249,6 +260,7 @@ export default class Detail extends Component {
           buttonText: 'Okay',
           type:'success'
         })
+        this.unsetLoading()
       })
       .catch(err => {
         Toast.show({
@@ -256,10 +268,12 @@ export default class Detail extends Component {
           buttonText: 'Okay',
           type:'danger'
         })
+        this.unsetLoading()
       })
   }
 
   downloadPDF = (id) => {
+    this.setLoading()
     const title = `pitstop-sarana ${this.state.fuelman} ${this.state.tanggal} ${this.state.shift}.pdf`;
     ServicePitstopSarana.exportPDF(id, title)
       .then(res => {
@@ -268,6 +282,7 @@ export default class Detail extends Component {
           buttonText: 'Okay',
           type:'success'
         })
+        this.unsetLoading()
       })
       .catch(err => {
         Toast.show({
@@ -275,6 +290,19 @@ export default class Detail extends Component {
           buttonText: 'Okay',
           type:'danger'
         })
+        this.unsetLoading()
       })
+  }
+
+  setLoading = () => {
+    this.setState({
+      loading: true
+    })
+  }
+
+  unsetLoading = () => {
+    this.setState({
+      loading: false
+    })
   }
 }

@@ -10,6 +10,7 @@ import ServicePitstopSarana from '../../../services/pitstop-sarana';
 import { Card, Icon, Text, Item, Input, Label, Picker } from 'native-base';
 import DateFloatingLabelWithValidation from '../../../components/input/DateFloatingLabelWithValidation';
 import { View, StyleSheet, TouchableWithoutFeedback, TouchableHighlight, FlatList, Alert } from 'react-native';
+import Loading from '../../../components/loading';
 
 let self = null;
 
@@ -30,6 +31,7 @@ export default class Index extends Component {
     super(props)
 
     this.state = {
+      loading: true,
       list: [],
       dataFound: true,
       isFetching: false,
@@ -140,6 +142,7 @@ export default class Index extends Component {
   render() {
     return (
       <View style={{flex:1}}>
+        <Loading loading={this.state.loading}/>
         {!this.state.dataFound && 
           <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
             <Text>Tidak ada data untuk ditampilkan</Text>
@@ -229,6 +232,7 @@ export default class Index extends Component {
   }
 
   getAllService = async () => {
+    this.setLoading()
     this.setState({
       dataFound:true,
       list:[],
@@ -248,15 +252,18 @@ export default class Index extends Component {
                 isFetching: false,
                 dataFound: true
               })
+              this.unsetLoading()
             } else {
               this.setState({
                 dataFound:false,
                 list: [],
               })
+              this.unsetLoading()
             }
           })
           .catch(err => {
             console.log('er', err)
+            this.unsetLoading()
           })
   }
 
@@ -283,6 +290,7 @@ export default class Index extends Component {
   }
 
   delete = async (id) => {
+    this.setLoading()
     await ServicePitstopSarana.deleteService(id)
       .then(res => {
         console.log('res', res)
@@ -290,11 +298,24 @@ export default class Index extends Component {
       })
       .catch(err => {
         console.log('err', err)
+        this.unsetLoading()
       })
   }
 
   toggleModal = () => {
     this.setState({ toggleModal: !this.state.toggleModal })
+  }
+
+  setLoading = () => {
+    this.setState({
+      loading: true
+    })
+  }
+
+  unsetLoading = () => {
+    this.setState({
+      loading: false
+    })
   }
 
 }

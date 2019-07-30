@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import { View, StyleSheet, Text, DatePickerAndroid, KeyboardAvoidingView } from 'react-native';
 import { Container, Content, Card, Item, Input, Label, Picker, Icon, Toast} from 'native-base';
 import { Button } from 'react-native-elements';
-import axios from 'axios'
 import ServicePetugas from '../../services/petugas'
+import Loading from '../../components/loading'
 
 export default class Edit extends Component {
   static navigationOptions = {
@@ -13,6 +13,7 @@ export default class Edit extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      loading: true,
       id: '',
       nama: '',
       username: '',
@@ -28,6 +29,7 @@ export default class Edit extends Component {
   }
 
   find = async () => {
+    this.setLoading()
     petugasId = this.props.navigation.state.params.petugasId;
     ServicePetugas.findPetugasById(petugasId)
       .then(res => {
@@ -40,6 +42,7 @@ export default class Edit extends Component {
           email: res.email,
           peran: res.peran
         });
+        this.unsetLoading()
       })
       .catch(err => {
         console.log(err)
@@ -47,6 +50,7 @@ export default class Edit extends Component {
   }
 
   updatePetugas = async () => {
+    this.setLoading()
     const formData = {
       id: this.state.id,
       nama: this.state.nama,
@@ -65,6 +69,7 @@ export default class Edit extends Component {
             type:'success'
           })
           this.props.navigation.navigate('PetugasIndex')
+          this.unsetLoading()
         })
         .catch(error => {
           Toast.show({
@@ -72,6 +77,7 @@ export default class Edit extends Component {
             buttonText: 'Okay',
             type:'danger'
           })
+          this.unsetLoading()
         })
   }
 
@@ -91,10 +97,23 @@ export default class Edit extends Component {
     }
   };
 
+  setLoading = () => {
+    this.setState({
+      loading: true
+    })
+  }
+
+  unsetLoading = () => {
+    this.setState({
+      loading: false
+    })
+  }
+
   render() {
     return (
       <Container>
         <Content>
+          <Loading loading={this.state.loading}/>
           <KeyboardAvoidingView behavior="padding">
             <Card style={{marginLeft:5, marginRight:5}}>
               <View style={{flex:1}}>

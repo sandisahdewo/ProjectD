@@ -4,6 +4,7 @@ import { Container, Content, Card, Icon, Text, Toast } from 'native-base';
 import { Button } from 'react-native-elements';
 import ActionButton from 'react-native-action-button';
 import ServicePetugas from '../../services/petugas'
+import Loading from '../../components/loading'
 
 export default class Index extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -19,6 +20,7 @@ export default class Index extends Component {
   };
 
   state = {
+    loading: true,
     listPetugas: []
   };
 
@@ -31,16 +33,20 @@ export default class Index extends Component {
   }
 
   getAllPetugas = async () => {
+    this.setLoading()
     await ServicePetugas.getAllPetugas()
             .then(res => {
               this.setState({listPetugas:res})
+              this.unsetLoading()
             })
             .catch(err => {
               console.log(err)
+              this.unsetLoading()
             })
   }
 
   toggleStatus = async (id) => {
+    this.setLoading()
     await ServicePetugas.toggleStatus(id)
       .then(res => {
         this.getAllPetugas()
@@ -49,6 +55,7 @@ export default class Index extends Component {
           buttonText: 'Okay',
           type:'success'
         })
+        this.unsetLoading()
       })
       .catch(err => {
         Toast.show({
@@ -56,8 +63,21 @@ export default class Index extends Component {
           buttonText: 'Okay',
           type:'danger'
         })
+        this.unsetLoading()
         console.log('err', err)
       })
+  }
+
+  setLoading = () => {
+    this.setState({
+      loading: true
+    })
+  }
+
+  unsetLoading = () => {
+    this.setState({
+      loading: false
+    })
   }
 
   keyExtractor = (item, index) => index.toString();
@@ -118,6 +138,7 @@ export default class Index extends Component {
     return (
       <Container>
         <Content>
+          <Loading loading={this.state.loading} />
           <FlatList
 						keyExtractor={this.keyExtractor}
 						data={this.state.listPetugas}

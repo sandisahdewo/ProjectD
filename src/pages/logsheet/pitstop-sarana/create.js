@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import Modal from "react-native-modal";
 import { Button } from 'react-native-elements';
 import ServiceUnit from '../../../services/unit';
+import Loading from '../../../components/loading'
 import ServicePitstopSarana from '../../../services/pitstop-sarana';
 import { Container, Content, Card, Item, Label, Icon, Input, Toast, Textarea } from 'native-base';
 import InputFloatingLabelWithValidation from '../../../components/input/FloatingLabelWithValidation'
@@ -15,6 +16,8 @@ export default class Create extends Component {
     super(props)
 
     this.state = {
+      loading: false,
+
       tanggal: '',
       jam: '',
 
@@ -73,6 +76,7 @@ export default class Create extends Component {
     return (
       <Container>
         <Content>
+          <Loading loading={this.state.loading} />
           <KeyboardAvoidingView behavior="padding">
 						<Card style={{marginLeft:5, marginRight:5}}>
               <View style={{flex:1}}>
@@ -222,13 +226,17 @@ export default class Create extends Component {
   }
 
   findLastLogsheet = () => {
+    this.setLoading()
     ServicePitstopSarana.findLastLogsheet()
       .then(res => {
         this.setState({
           flow_meter_awal: String(res.flow_meter_akhir)
         })
+        this.unsetLoading()
       })
-      .catch(err => {})
+      .catch(err => {
+        this.unsetLoading()
+      })
   }
 
   toggleModalFindUnit = () => {
@@ -240,6 +248,7 @@ export default class Create extends Component {
 
   searchUnit = (query) => {
     if(query.length >= 3) {
+      this.setLoading()
       ServiceUnit.search(query)
       .then(res => {
         if(res.length > 0) {
@@ -247,11 +256,13 @@ export default class Create extends Component {
             listUnit: res,
             unitNotFound: false 
           })
+          this.unsetLoading()
         } else {
           this.setState({
             unitNotFound: true,
             listUnit: []
           })
+          this.unsetLoading()
         }
       })
       .catch(err => {
@@ -260,6 +271,7 @@ export default class Create extends Component {
           buttonText: 'Okay',
           type:'danger'
         })
+        this.unsetLoading()
       })
     }
   }
@@ -299,6 +311,7 @@ export default class Create extends Component {
   }
 
   store = () => {
+    this.setLoading()
     const pitstopSaranaId = this.props.navigation.state.params.pitstopSaranaId;
     console.log('sarana id di create', pitstopSaranaId)
     const formData = {
@@ -343,14 +356,28 @@ export default class Create extends Component {
               selisih_flow_meter: '',
             }
           })
+          this.unsetLoading()
         } else {
           Toast.show({
             text: 'Gagal menyimpan logsheet pitstop sarana!',
             buttonText: 'Okay',
             type:'danger'
           })
+          this.unsetLoading()
         }
       })
+  }
+
+  setLoading = () => {
+    this.setState({
+      loading: true
+    })
+  }
+
+  unsetLoading = () => {
+    this.setState({
+      loading: false
+    })
   }
   
 }
