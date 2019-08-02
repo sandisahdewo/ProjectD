@@ -5,15 +5,18 @@ import ActionButton from 'react-native-action-button';
 import {View, Text, RefreshControl} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import User from '../../storages/async-storage/user'
+import Loading from '../../components/loading'
 
 export default class Index extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isFetching: true,
+      loading: true,
+      loadMore: false,
+      refresh: false,
       page: 1,
       q: '',
-      unit: [],
+      list: [],
 
       user: {
         petugas: {}
@@ -24,7 +27,7 @@ export default class Index extends Component {
   componentDidMount = () => {
     this.props.navigation.addListener('willFocus', 
       () => {
-        this.handleRefresh();
+        this.getUnit();
         this.getUserLogin()
       }
     )
@@ -45,17 +48,28 @@ export default class Index extends Component {
       .then(res => {
         this.setState({
           list: page === 1 ? res.data : [...list, ...res.data],
-          isFetching: false
+          refresh: false,
+          loadMore: false,
+          loading:false
         })
       })
       .catch(err => {
-        console.log('err', err)
+        Toast.show({
+          text: err.message,
+          buttonText: 'Okay',
+          type:'danger'
+        })
+        this.setState({
+          refresh: false,
+          loadMore: false,
+          loading:false
+        })
       })
   }
 
   handleRefresh = () => {
     this.setState({
-      isFetching: true,
+      refresh: true,
       q: '',
       page:1
     }, () => {
@@ -64,9 +78,9 @@ export default class Index extends Component {
   }
 
   handleLoadMore = () => {
-    if(!this.state.isFetching) {
+    if(!this.state.loadMore && this.state.list.length >= 25) {
       this.setState({
-        isFetching: true,
+        loadMore: true,
         page:this.state.page+1
       }, () => {
         this.getUnit()
@@ -76,12 +90,21 @@ export default class Index extends Component {
 
   handleSearch = (q) => {
     this.setState({
-      isFetching: true,
+      loading: true,
       q: q,
       page:1
     }, () => {
       this.getUnit()
     })
+  }
+
+  renderFooter = () => {
+    if(!this.state.loadMore) return null
+    return (
+      <View style={{ height:30, justifyContent:'center', alignItems:'center'}}>
+        <Text style={{color:'grey'}}>Loading...</Text>
+      </View>
+    ) 
   }
 
   keyExtractor = (item, index) => index.toString();
@@ -108,7 +131,8 @@ export default class Index extends Component {
 
     return (
       <View style={{flex:1}}>
-        <View>
+        <Loading loading={this.state.loading} />
+        <View style={{height:'10%'}}>
           <Input 
             containerStyle={{width:'100%'}}
             placeholder='Cari unit'
@@ -118,7 +142,7 @@ export default class Index extends Component {
             leftIcon={{ type: 'font-awesome', name: 'search', size:19, color:'#696969' }} 
           />
         </View>
-        <View style={{paddingTop:7}}>
+        <View style={{ height:'90%'}}>
           <FlatList
             keyExtractor={this.keyExtractor}
             data={this.state.list}
@@ -126,11 +150,12 @@ export default class Index extends Component {
             refreshControl={
               <RefreshControl
                 onRefresh={() => this.handleRefresh() }
-                refreshing={this.state.isFetching}
+                refreshing={this.state.refresh}
               />
             }
-            onEndReachedThreshold={0.4}
+            onEndReachedThreshold={0.1}
             onEndReached={() => this.handleLoadMore()}
+            ListFooterComponent={() => this.renderFooter()}
           />
         </View>
         {(roleAdmin || rolePengawas) &&

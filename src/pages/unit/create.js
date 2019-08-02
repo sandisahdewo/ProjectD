@@ -2,13 +2,15 @@ import React, {Component} from 'react';
 import {Card, Toast} from 'native-base';
 import ServiceUnit from '../../services/unit';
 import {Button} from 'react-native-elements';
-import {View, KeyboardAvoidingView, Text} from 'react-native';
+import {View, KeyboardAvoidingView} from 'react-native';
 import InputWithValidation from '../../components/input/FloatingLabelWithValidation';
+import Loading from '../../components/loading'
 
 export default class Create extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      loading: false,
       kode_unit: '',
       tipe_unit: '',
       no_polisi: '',
@@ -26,6 +28,7 @@ export default class Create extends Component {
   render() {
     return (
       <View style={{flex:1}}>
+        <Loading loading={this.state.loading}/>
         <KeyboardAvoidingView behavior='padding'>
           <Card style={{padding:4, paddingTop:10, paddingBottom:10}}>
             <InputWithValidation title='Kode Unit' onChangeText={(kode_unit) => this.setState({kode_unit})} error={this.state.validation.kode_unit} />
@@ -42,6 +45,7 @@ export default class Create extends Component {
   }
 
   store = () => {
+    this.setLoading()
     this.setState({
       validation: {}
     })
@@ -71,6 +75,7 @@ export default class Create extends Component {
               jatah_solar: error.jatah_solar,
             }
           })
+          this.unsetLoading()
         } 
         Toast.show({
           text: 'Gagal menyimpan unit!',
@@ -78,5 +83,17 @@ export default class Create extends Component {
           type:'danger'
         })
       })
+  }
+  
+  setLoading = () => {
+    this.setState({
+      loading: true
+    })
+  }
+
+  unsetLoading = () => {
+    this.setState({
+      loading: false
+    })
   }
 }

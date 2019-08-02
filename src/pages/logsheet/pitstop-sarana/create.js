@@ -8,7 +8,7 @@ import Loading from '../../../components/loading'
 import ServicePitstopSarana from '../../../services/pitstop-sarana';
 import { Container, Content, Card, Item, Label, Icon, Input, Toast, Textarea } from 'native-base';
 import InputFloatingLabelWithValidation from '../../../components/input/FloatingLabelWithValidation'
-import { View, Text, KeyboardAvoidingView, StyleSheet, TimePickerAndroid, FlatList, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, KeyboardAvoidingView, StyleSheet, FlatList, TouchableWithoutFeedback } from 'react-native';
 
 export default class Create extends Component {
 
@@ -47,16 +47,24 @@ export default class Create extends Component {
         flow_meter_awal: '',
         flow_meter_akhir: '',
         selisih_flow_meter: '',
-      }
+      },
+
+      pitstopSaranaLine: this.props.navigation.state.params.pitstopSaranaLine,
+      pitstopSaranaNomor: this.props.navigation.state.params.pitstopSaranaNomor,
+      pitstopSaranaId: this.props.navigation.state.params.pitstopSaranaId
     }
   }
 
   componentDidMount = () => {
-    this.setState({
-      tanggal: format(new Date(), 'DD-MM-YYYY'),
-      jam: format(new Date(), 'HH:mm:ss'),
-    })
-    this.findLastLogsheet()
+    this.props.navigation.addListener('willFocus', 
+      () => {
+        this.setState({
+          tanggal: format(new Date(), 'DD-MM-YYYY'),
+          jam: format(new Date(), 'HH:mm:ss'),
+        })
+        this.findLastLogsheet()
+      }
+    )
   }
 
   keyExtractorModal = (item, index) => index.toString()
@@ -227,7 +235,9 @@ export default class Create extends Component {
 
   findLastLogsheet = () => {
     this.setLoading()
-    ServicePitstopSarana.findLastLogsheet()
+    const pitstopSaranaLine = this.state.pitstopSaranaLine;
+    const pitstopSaranaNomor = this.state.pitstopSaranaNomor;
+    ServicePitstopSarana.findLastLogsheet(pitstopSaranaLine, pitstopSaranaNomor)
       .then(res => {
         this.setState({
           flow_meter_awal: String(res.flow_meter_akhir)
@@ -247,6 +257,7 @@ export default class Create extends Component {
   }
 
   searchUnit = (query) => {
+    console.log('pitstop', this.state.pitstopSaranaId, this.state.pitstopSaranaLine, this.state.pitstopSaranaNomor)
     if(query.length >= 3) {
       this.setLoading()
       ServiceUnit.search(query)
@@ -305,6 +316,7 @@ export default class Create extends Component {
     if(awal.length > 0 && akhir > awal) {
       let selisih = akhir-awal;
       this.setState({ selisih_flow_meter: selisih.toString() })
+      console.log(selisih)
     } else {
       this.setState({ selisih_flow_meter: '0' })
     }
@@ -312,8 +324,7 @@ export default class Create extends Component {
 
   store = () => {
     this.setLoading()
-    const pitstopSaranaId = this.props.navigation.state.params.pitstopSaranaId;
-    console.log('sarana id di create', pitstopSaranaId)
+    const pitstopSaranaId = this.state.pitstopSaranaId;
     const formData = {
       pitstop_sarana_id: pitstopSaranaId,
       jam: this.state.jam,
@@ -336,7 +347,13 @@ export default class Create extends Component {
             buttonText: 'Okay',
             type:'success'
           })
-          this.props.navigation.push('LogsheetPitstopSaranaIndex', {pitstopSaranaId: pitstopSaranaId})
+          this.resetForm()
+          this.unsetLoading()
+          this.props.navigation.push('LogsheetPitstopSaranaIndex', {
+            pitstopSaranaId: this.state.pitstopSaranaId,
+            pitstopSaranaLine: this.state.pitstopSaranaLine,
+            pitstopSaranaNomor: this.state.pitstopSaranaNomor,
+          })
         }
       })
       .catch(err => {
@@ -377,6 +394,26 @@ export default class Create extends Component {
   unsetLoading = () => {
     this.setState({
       loading: false
+    })
+  }
+
+  resetForm = () => {
+    this.setState({
+      kode_unit: '',
+      tipe_unit: '',
+      hm_km: '',
+      no_polisi: '',
+      jatah_solar: '',
+      nama_user: '',
+      qty_solar: '',
+      flow_meter_awal: '',
+      flow_meter_akhir: '',
+      selisih_flow_meter: '',
+      keterangan: '',
+
+      validation: {}
+    }, () => {
+      this.findLastLogsheet()
     })
   }
   

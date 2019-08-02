@@ -5,12 +5,14 @@ import {Button} from 'react-native-elements';
 import {View, KeyboardAvoidingView, Alert} from 'react-native';
 import InputWithValidation from '../../components/input/FloatingLabelWithValidation';
 import User from '../../storages/async-storage/user'
+import Loading from '../../components/loading'
 
 export default class Edit extends Component {
   
   constructor(props) {
     super(props)
     this.state = {
+      loading: true,
       user: {
         petugas: {}
       },
@@ -44,6 +46,7 @@ export default class Edit extends Component {
 
     return (
       <View style={{flex:1}}>
+        <Loading loading={this.state.loading} />
         <KeyboardAvoidingView behavior='padding'>
           <Card style={{padding:4, paddingTop:10, paddingBottom:10}}>
             <InputWithValidation title='Kode Unit' value={this.state.kode_unit} onChangeText={(kode_unit) => this.setState({kode_unit})} error={this.state.validation.kode_unit} />
@@ -67,6 +70,7 @@ export default class Edit extends Component {
   }
 
   find = () => {
+    this.setLoading()
     const id = this.props.navigation.state.params.unitId;
     ServiceUnit.find(id)
       .then(res => {
@@ -76,6 +80,7 @@ export default class Edit extends Component {
           no_polisi: res.no_polisi,
           jatah_solar: res.jatah_solar
         })
+        this.unsetLoading()
       })
       .catch(err => {
         Toast.show({
@@ -83,10 +88,12 @@ export default class Edit extends Component {
           buttonText: 'Okay',
           type:'danger'
         })
+        this.unsetLoading()
       })
   }
 
   update = () => {
+    this.setLoading()
     this.setState({
       validation: {}
     })
@@ -121,10 +128,12 @@ export default class Edit extends Component {
           buttonText: 'Okay',
           type:'danger'
         })
+        this.unsetLoading()
       })
   }
 
   destroy = () => {
+    this.setLoading()
     const id = this.props.navigation.state.params.unitId;
     Alert.alert(
       'Apakah yakin akan menghapus unit?',
@@ -154,10 +163,23 @@ export default class Edit extends Component {
                 buttonText: 'Okay',
                 type:'danger'
               })
+              this.unsetLoading()
             })
           }
         },
       ],
     );
+  }
+
+  setLoading = () => {
+    this.setState({
+      loading: true
+    })
+  }
+
+  unsetLoading = () => {
+    this.setState({
+      loading: false
+    })
   }
 }

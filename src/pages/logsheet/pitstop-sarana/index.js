@@ -104,6 +104,8 @@ export default class Index extends Component {
 
   render() {
     const pitstopSaranaId = this.props.navigation.state.params.pitstopSaranaId;
+    const pitstopSaranaLine = this.props.navigation.state.params.pitstopSaranaLine;
+    const pitstopSaranaNomor = this.props.navigation.state.params.pitstopSaranaNomor;
     const buttonAdd = this.state.detail.length == 0 ? true : false;
     const buttonAddAndApprove = this.state.status == 'input' || this.state.status == 'rejected' && this.state.detail.length < 30 && this.state.detail.length >= 1 ? true : false;
     const buttonApprove = this.state.detail.length == 30 ? true : false;
@@ -144,10 +146,10 @@ export default class Index extends Component {
         </Content>
         { buttonAddAndApprove &&
           <ActionButton buttonColor="rgba(231,76,60,1)">
-            <ActionButton.Item buttonColor='green' onPress={() => this.finishInputDetail()} >
+            <ActionButton.Item buttonColor='green' onPress={() => this.confirmFinishInputLogsheetWhenNotCompleteRecord()} >
               <Icon name='checkmark' style={{color:'white'}} />
             </ActionButton.Item>
-            <ActionButton.Item buttonColor='blue' onPress={() => this.props.navigation.navigate('LogsheetPitstopSaranaCreate', { pitstopSaranaId: pitstopSaranaId })} >
+            <ActionButton.Item buttonColor='blue' onPress={() => this.props.navigation.push('LogsheetPitstopSaranaCreate', { pitstopSaranaId: pitstopSaranaId, pitstopSaranaLine:pitstopSaranaLine, pitstopSaranaNomor:pitstopSaranaNomor })} >
               <Icon name='add' style={{color:'white'}} />
             </ActionButton.Item>
           </ActionButton>
@@ -156,7 +158,7 @@ export default class Index extends Component {
           <ActionButton buttonColor="green" renderIcon={() => (<Icon name='checkmark' style={{color:'white'}} />)} onPress={() => this.finishInputDetail()}/>
         }
         { buttonAdd &&
-          <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => this.props.navigation.navigate('LogsheetPitstopSaranaCreate', { pitstopSaranaId: pitstopSaranaId })}/>
+          <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => this.props.navigation.push('LogsheetPitstopSaranaCreate', { pitstopSaranaId: pitstopSaranaId, pitstopSaranaLine:pitstopSaranaLine, pitstopSaranaNomor:pitstopSaranaNomor })}/>
         }
       </Container>
     );
@@ -191,7 +193,7 @@ export default class Index extends Component {
         this.unsetLoading()
       })
       .catch(err => {
-        console.log('err', err)
+        this.unsetLoading()
       })
   }
 
@@ -240,6 +242,23 @@ export default class Index extends Component {
       ],
     );
   }
+
+  confirmFinishInputLogsheetWhenNotCompleteRecord = () => {
+    Alert.alert(
+      'Apakah yakin akan menyetujui input logsheet?',
+      ``,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'OK', 
+          onPress: () => this.finishInputDetail()
+        }
+      ]
+    )
+    }
 
   finishInputDetail = () => {
     this.setLoading()

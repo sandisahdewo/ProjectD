@@ -7,7 +7,7 @@ import { Button } from 'react-native-elements';
 import BtnSm from '../../../components/button/small';
 import ActionButton from 'react-native-action-button';
 import ServicePitstopSarana from '../../../services/pitstop-sarana';
-import { Card, Icon, Text, Item, Input, Label, Picker } from 'native-base';
+import { Card, Icon, Text, Item, Input, Label, Picker, Toast } from 'native-base';
 import DateFloatingLabelWithValidation from '../../../components/input/DateFloatingLabelWithValidation';
 import { View, StyleSheet, TouchableWithoutFeedback, TouchableHighlight, FlatList, Alert } from 'react-native';
 import Loading from '../../../components/loading';
@@ -48,14 +48,13 @@ export default class Index extends Component {
 
   componentDidMount = () => {
     self = this;
-    
-    this.setState({
-      filter_tanggal: format(new Date(), 'DD-MM-YYYY'),
-    })
 
     this.props.navigation.addListener('willFocus', 
       () => {
-        this.getAllService();
+        this.getAllService()
+        this.setState({
+          filter_tanggal: format(new Date(), 'DD-MM-YYYY'),
+        })
       }
     )
   }
@@ -64,7 +63,7 @@ export default class Index extends Component {
 
   renderItem = ({ item }) => (
     <Card>
-      <TouchableWithoutFeedback style={{backgroundColor:'blue'}} onPress={() => this.props.navigation.navigate('LogsheetPitstopSaranaIndex', { pitstopSaranaId:item.id })}>
+      <TouchableWithoutFeedback style={{backgroundColor:'blue'}} onPress={() => this.props.navigation.navigate('LogsheetPitstopSaranaIndex', { pitstopSaranaId:item.id, pitstopSaranaLine:item.line, pitstopSaranaNomor:item.nomor })}>
         <View style={{flex:1, paddingHorizontal:10, paddingVertical:10}}>
           <View>
             <View style={{flex:1, flexDirection:'row', justifyContent:'space-between'}}>
@@ -262,7 +261,11 @@ export default class Index extends Component {
             }
           })
           .catch(err => {
-            console.log('er', err)
+            Toast.show({
+              text: err.message,
+              buttonText: 'Oops',
+              type:'danger'
+            })
             this.unsetLoading()
           })
   }
