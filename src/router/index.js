@@ -40,6 +40,8 @@ import DownloadReportPitstopSaranaDetail from '../pages/download-report/pitstop-
 
 import ChangePassword from '../pages/change-password/form'
 
+import ScanBarcode from '../pages/scan-barcode'
+
 import Sidebar from "../components/sidebar/sidebar"
 import { createSwitchNavigator, createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation';
 
@@ -52,6 +54,7 @@ const LoginStack = createStackNavigator({
 });
 
 const PageStack = createStackNavigator({
+
   TabIndex: { 
     screen: Tab,
     navigationOptions: () => ({
@@ -220,7 +223,6 @@ const PageStack = createStackNavigator({
   LogsheetPitstopSaranaCreate: { 
     screen: LogsheetPitstopSaranaCreate,
     navigationOptions: () => ({
-      title: 'Tambah Logsheet',
       headerTintColor: 'white',
       headerStyle: {
         backgroundColor: '#3C8DBC',
