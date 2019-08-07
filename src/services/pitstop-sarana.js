@@ -18,7 +18,7 @@ const getAllLogsheet = () => Get('pitstop-sarana-detail')
 const storeLogsheet = (data) => Post('pitstop-sarana-detail/store', data)
 const updateLogsheet = (data, id) => Patch(`pitstop-sarana-detail/update/${id}`, data)
 const deleteLogsheet = (id) => Delete('pitstop-sarana-detail/delete', id)
-const findLastLogsheet = (line, nomor) => Get(`pitstop-sarana-detail/find-last?line=${line}&nomor=${nomor}`)
+const findLastLogsheet = (line, nomor) => Get(`pitstop-sarana-detail/find-last?nomor=${nomor}`)
 
 // Approval
 const getServiceIgnoreLineWithParams = (params) => Get(`pitstop-sarana/with-filter?nomor=${params.nomor}&tanggal=${params.tanggal}&shift=${params.shift}&status=${params.status}`)
