@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import {View, Text, TouchableHighlight, StyleSheet} from 'react-native'
 import {RNCamera} from 'react-native-camera'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import BarcodeMask  from 'react-native-barcode-mask'
 
 const ScanBarcode = (props) => {
   let [flashStatus, toggleFlashStatus] = useState(false)
@@ -25,7 +26,8 @@ const ScanBarcode = (props) => {
   })
 
   return (
-    <RNCamera
+    <View style={{flex:1}}>
+      <RNCamera
         ref={cam => {
           camera = cam;
         }}
@@ -54,23 +56,17 @@ const ScanBarcode = (props) => {
           props.handleOnBarCodeRead(barcodes)
         }}
       >
-        <View style={styles.layerTop} />
-        <View style={styles.layerCenter}>
-          <View style={styles.layerLeft} />
-          <View style={styles.focused} />
-          <View style={styles.layerRight} />
-        </View>
-        <View style={styles.layerBottom} />
-
-        <View style={{bottom:0, width:'100%'}}>
-          <TouchableHighlight onPress={() => handleToggleFlashStatus()} style={{backgroundColor:'black', height:70, justifyContent:'center', alignItems:'center'}}>
-            <View style={{alignItems:'center'}}>
-              <FontAwesomeIcon name='flash' size={32} color='white'/>
-              <Text style={{color:'white', fontSize:14}}>Flash {textFlashStatus}</Text>
-            </View>
-          </TouchableHighlight>
-        </View>
+        <BarcodeMask width={200} height={200} edgeColor={'#62B1F6'} showAnimatedLine={false}/>
       </RNCamera>
+      <View style={{position:'absolute', bottom:0, width:'100%'}}>
+        <TouchableHighlight onPress={() => handleToggleFlashStatus()} style={{backgroundColor:'black', height:70, justifyContent:'center', alignItems:'center'}}>
+          <View style={{alignItems:'center'}}>
+            <FontAwesomeIcon name='flash' size={32} color='white'/>
+            <Text style={{color:'white', fontSize:14}}>Flash {textFlashStatus}</Text>
+          </View>
+        </TouchableHighlight>
+      </View>
+    </View>
   )
 }
 

@@ -15,7 +15,7 @@ export default class Create extends Component {
 
   static navigationOptions = ({navigation}) => {
     return {
-      title: navigation.getParam('scanBarcodeOpen') ? 'Scan Barcode' : 'Tambah Logsheet',
+      title: navigation.getParam('scanBarcodeOpen') ? 'Scan QR Code' : 'Tambah Logsheet',
       headerLeft: (
         navigation.getParam('scanBarcodeOpen') 
         ? 
@@ -330,14 +330,21 @@ export default class Create extends Component {
     this.setLoading()
     ServiceUnit.findByKode(kode)
       .then(res => {
-        if(res) {
-          this.setSelectedUnit(res)
+        console.log('ress', res)
+        if(res.success) {
+          this.setSelectedUnit(res.data)
           this.unsetLoading()
         } else {
           Toast.show({
             text: 'Data Unit tidak ditemukan.',
             buttonText: 'Okay',
             type:'danger'
+          })
+          this.setState({
+            kode_unit: '',
+            tipe_unit: '',
+            no_polisi: '',
+            jatah_solar: ''
           })
           this.unsetLoading()
         }
